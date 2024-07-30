@@ -59,7 +59,9 @@ class AddProduct extends StatelessWidget {
               FieldDesc("Catagory"),
               Textfield(),
               FieldDesc("Price"),
-              Textfield(),
+              Textfield(
+                suffixicon: true,
+              ),
               FieldDesc("Description"),
               Textfield(
                 fieldHeight: 0.25,

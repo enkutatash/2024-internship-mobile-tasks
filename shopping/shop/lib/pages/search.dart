@@ -36,7 +36,9 @@ class SearchPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SearchField(),
+                  SearchField(
+                    suffixIcon: true,
+                  ),
                   SizedBox(
                     width: width * 0.02,
                   ),

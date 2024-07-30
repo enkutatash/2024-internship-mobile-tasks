@@ -3,7 +3,8 @@ import 'package:shop/const/app_colors.dart';
 
 class Textfield extends StatelessWidget {
   double fieldHeight;
-  Textfield({this.fieldHeight = 0.05, super.key});
+  bool suffixicon;
+  Textfield({this.fieldHeight = 0.05, this.suffixicon = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,15 @@ class Textfield extends StatelessWidget {
       height: height * fieldHeight,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: AppColors.gray),
-      child: const TextField(
-        decoration: InputDecoration(border: InputBorder.none),
+      child: TextField(
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          suffixIcon: suffixicon
+              ? Icon(
+                  Icons.attach_money_sharp,
+                )
+              : null,
+        ),
         keyboardType: TextInputType.multiline,
         maxLines: 10,
       ),
