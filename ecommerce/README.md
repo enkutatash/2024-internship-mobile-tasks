@@ -27,8 +27,11 @@ Ecommerce UI
 
 2. **Install dependencies:**
 
+
+    ```sh
     flutter pub get
-    
+
 3. **Run the app:**
 
+    ```sh
     flutter run
