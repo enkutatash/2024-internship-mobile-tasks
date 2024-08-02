@@ -9,7 +9,6 @@ class BottomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(25.0),
@@ -27,9 +26,9 @@ class BottomDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding:  EdgeInsets.all(8.0),
             child: Text(
-              "Category",
+              'Category',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
@@ -40,12 +39,12 @@ class BottomDialog extends StatelessWidget {
           SizedBox(
             height: height * 0.02,
           ),
-          RangeSliderView(),
+          const RangeSliderView(),
           SizedBox(
             height: height * 0.02,
           ),
-          FiledButton(
-            name: "APPLY",
+          const FiledButton(
+            name: 'APPLY',
             width: 0.85,
           )
         ],

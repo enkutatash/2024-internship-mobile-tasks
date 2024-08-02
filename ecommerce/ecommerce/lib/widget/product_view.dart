@@ -1,6 +1,5 @@
 import 'package:ecommerce/data/colors.dart';
 import 'package:ecommerce/model/product_model.dart';
-import 'package:ecommerce/view/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,21 +9,20 @@ class ProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () => context.go('/detail', extra: item),
       child: Container(
-        margin: EdgeInsets.all(8),
+        margin:const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
+          boxShadow:const [
             BoxShadow(
               color: AppColors.lightGrey,
               spreadRadius: 2,
               blurRadius: 5,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -53,15 +51,15 @@ class ProductView extends StatelessWidget {
                 children: [
                   Text(
                     item.name,
-                    style: TextStyle(
+                    style:const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 20,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
-                    "\$${item.price}",
-                    style: TextStyle(
+                    '\$${item.price}',
+                    style:const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                     ),
@@ -74,21 +72,21 @@ class ProductView extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "${item.category}",
-                    style: TextStyle(
+                    '${item.category}',
+                    style:const TextStyle(
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
                     ),
                   ),
-                  Spacer(),
-                  Icon(
+                  const Spacer(),
+                 const Icon(
                     Icons.star,
                     color: AppColors.golden,
                   ),
                   Text(
-                    "(${item.star})",
-                    style: TextStyle(
+                    '(${item.star})',
+                    style:const TextStyle(
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w400,
                       fontSize: 12,

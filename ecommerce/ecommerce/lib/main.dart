@@ -1,6 +1,7 @@
 import 'package:ecommerce/data/colors.dart';
-import 'package:flutter/material.dart';
 import 'package:ecommerce/data/page_route.dart';
+
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());

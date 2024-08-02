@@ -3,7 +3,7 @@ class Product {
   final String name;
   final double price;
   final String description;
-  final Category category;
+  final String category;
   final int size;
   double star = 0;
 
@@ -16,11 +16,6 @@ class Product {
     required this.size,
     this.star = 0,
   });
-}
-
-enum Category {
-  femaleShoes,
-  maleShoes,
 }
 
 enum Size {

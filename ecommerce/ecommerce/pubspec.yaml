@@ -38,6 +38,7 @@ dependencies:
 
   # ui related
   go_router: ^14.2.1
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

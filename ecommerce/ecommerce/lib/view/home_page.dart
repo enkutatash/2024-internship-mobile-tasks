@@ -6,9 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -36,15 +41,15 @@ class HomePage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(
-                        text: "July 14, 2024",
+                      const CustomText(
+                        text: 'July 14, 2024',
                         fontSize: 12,
                         color: AppColors.textGrey,
                       ),
                       Row(
                         children: [
-                          CustomText(
-                            text: "Hello",
+                          const CustomText(
+                            text: 'Hello',
                             fontSize: 15,
                             color: AppColors.textGrey,
                             weight: FontWeight.w400,
@@ -52,8 +57,8 @@ class HomePage extends StatelessWidget {
                           SizedBox(
                             width: width * 0.01,
                           ),
-                          CustomText(
-                            text: "Yohannes",
+                          const CustomText(
+                            text: 'Yohannes',
                             fontSize: 15,
                             weight: FontWeight.w600,
                           ),
@@ -70,7 +75,7 @@ class HomePage extends StatelessWidget {
                       color: AppColors.white,
                       border: Border.all(width: 0.03),
                     ),
-                    child: Image.asset("assets/images/bell_icon.png"),
+                    child: Image.asset('assets/images/bell_icon.png'),
                   ),
                 ],
               ),
@@ -80,13 +85,13 @@ class HomePage extends StatelessWidget {
               Row(
                 children: [
                   const Text(
-                    "Available Products",
+                    'Available Products',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 25,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Container(
                     width: width * 0.11,
                     height: height * 0.055,
@@ -96,7 +101,7 @@ class HomePage extends StatelessWidget {
                       color: AppColors.white,
                     ),
                     child: IconButton(
-                      icon: Icon(CupertinoIcons.search),
+                      icon: const Icon(CupertinoIcons.search),
                       onPressed: () => context.go('/search'),
                     ),
                   ),

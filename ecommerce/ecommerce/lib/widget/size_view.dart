@@ -1,6 +1,7 @@
 import 'package:ecommerce/data/colors.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SizeView extends StatelessWidget {
   int selectedSize;
   SizeView({required this.selectedSize, super.key});
@@ -10,7 +11,7 @@ class SizeView extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      padding: EdgeInsets.all(5),
+      padding:const EdgeInsets.all(5),
       height: height * 0.08,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -18,7 +19,7 @@ class SizeView extends StatelessWidget {
           itemBuilder: (context, index) {
             return Container(
               width: width * 0.13,
-              margin: EdgeInsets.all(4),
+              margin:const EdgeInsets.all(4),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: selectedSize == sizeList[index]
@@ -29,12 +30,12 @@ class SizeView extends StatelessWidget {
                       color: AppColors.gray,
                       spreadRadius: 1,
                       blurRadius: 5,
-                      offset: const Offset(0, 3),
+                      offset: Offset(0, 3),
                     ),
                   ]),
               child: Center(
                 child: Text(
-                  "${sizeList[index]}",
+                  '${sizeList[index]}',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20,

@@ -1,4 +1,5 @@
 import 'package:ecommerce/data/colors.dart';
+import 'package:ecommerce/data/product_list.dart';
 import 'package:ecommerce/model/product_model.dart';
 import 'package:ecommerce/widget/filed_button.dart';
 import 'package:ecommerce/widget/red_outlined.dart';
@@ -12,7 +13,6 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
@@ -35,7 +35,7 @@ class ProductDetail extends StatelessWidget {
                   top: 40,
                   left: 20,
                   child: IconButton(
-                    icon: Image.asset("assets/images/back_arrow_icon.png"),
+                    icon: Image.asset('assets/images/back_arrow_icon.png'),
                     onPressed: () => context.go('/home'),
                   )),
             ]),
@@ -44,7 +44,7 @@ class ProductDetail extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "${item.category}",
+                    '${item.category}',
                     style: const TextStyle(
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w400,
@@ -57,7 +57,7 @@ class ProductDetail extends StatelessWidget {
                     color: AppColors.golden,
                   ),
                   Text(
-                    "(${item.star})",
+                    '(${item.star})',
                     style: const TextStyle(
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w400,
@@ -80,7 +80,7 @@ class ProductDetail extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    "\$${item.price}",
+                    '\$${item.price}',
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
@@ -90,9 +90,9 @@ class ProductDetail extends StatelessWidget {
               ),
             ),
             const Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10.0),
               child: Text(
-                "Size: ",
+                'Size: ',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 20,
@@ -105,7 +105,7 @@ class ProductDetail extends StatelessWidget {
             ),
             Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 child: Text(
                   item.description,
                   style: const TextStyle(
@@ -114,15 +114,20 @@ class ProductDetail extends StatelessWidget {
                       color: AppColors.textGrey2),
                 )),
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                 children: [
-                  const RedOutlinedButton(
-                    name: "DELETE",
+                  RedOutlinedButton(
+                    name: 'DELETE',
+                    ontap: () {
+                      productList.remove(item);
+                      context.go('/home');
+                      debugPrint("${item!.name} has removed");
+                    },
                   ),
-                  Spacer(),
+                  const Spacer(),
                   FiledButton(
-                    name: "UPDATE",
+                    name: 'UPDATE',
                     ontap: () => context.go('/update', extra: item),
                   )
                 ],

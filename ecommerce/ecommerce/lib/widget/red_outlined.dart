@@ -6,9 +6,14 @@ class RedOutlinedButton extends StatelessWidget {
   final String name;
   final double width;
   final double height;
+  final VoidCallback? ontap;
 
   const RedOutlinedButton(
-      {required this.name, this.width = 0.37, this.height = 0.06, super.key});
+      {required this.name,
+      this.width = 0.37,
+      this.height = 0.06,
+      this.ontap,
+      super.key});
 
   @override
   Widget build(BuildContext context) {

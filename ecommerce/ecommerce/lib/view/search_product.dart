@@ -24,12 +24,12 @@ class SearchPage extends StatelessWidget {
                 size: 20,
                 color: AppColors.purple,
               )),
-          title: Text("Search Product"),
+          title: const Text('Search Product'),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding:const EdgeInsets.all(20),
             child: Column(
               children: [
                 Row(
