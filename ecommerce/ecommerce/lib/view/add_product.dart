@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecommerce/data/colors.dart';
 import 'package:ecommerce/data/product_list.dart';
 import 'package:ecommerce/model/product_model.dart';
@@ -7,6 +9,7 @@ import 'package:ecommerce/widget/red_outlined.dart';
 import 'package:ecommerce/widget/text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProduct extends StatefulWidget {
   final Product? item;
@@ -22,6 +25,9 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController price = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController size = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
+  String imagePath = '';
 
   @override
   void initState() {
@@ -32,6 +38,19 @@ class _AddProductState extends State<AddProduct> {
       category.text = widget.item!.category as String;
       price.text = widget.item!.price.toString();
       description.text = widget.item!.description;
+      imagePath = widget.item!.imagePath;
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        imagePath = pickedFile.path;
+      });
+    } else {
+      debugPrint('No image selected.');
     }
   }
 
@@ -64,29 +83,33 @@ class _AddProductState extends State<AddProduct> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: double.infinity,
-                height: height * 0.2,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColors.lightGrey),
-                child: widget.item != null
-                    ? Image.asset(widget.item!.imagePath)
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Image.asset(
-                                'assets/images/image_icon.png',
-                                width: 35,
-                                height: 35,
-                              )),
-                          const CustomText(
-                            text: 'Upload image',
-                          )
-                        ],
+                  width: double.infinity,
+                  height: height * 0.2,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.lightGrey),
+                  child: Stack(
+                    children: [
+                      _image != null
+                          ? Image.file(_image!)
+                          : imagePath.isNotEmpty
+                              ? Image.asset(imagePath)
+                              : Center(
+                                  child: Text("Upload Image"),
+                                ),
+                      Positioned(
+                        right: 10,
+                        bottom: 10,
+                        child: IconButton(
+                            onPressed: () => _pickImage(ImageSource.gallery),
+                            icon: Image.asset(
+                              'assets/images/image_icon.png',
+                              width: 35,
+                              height: 35,
+                            )),
                       ),
-              ),
+                    ],
+                  )),
               SizedBox(
                 height: height * 0.012,
               ),
@@ -187,7 +210,7 @@ class _AddProductState extends State<AddProduct> {
           size: int.parse(size.text),
           price: double.parse(price.text),
           description: description.text,
-          imagePath: widget.item!.imagePath);
+          imagePath: imagePath);
       productList.remove(widget.item);
       productList.add(product);
     } else {
@@ -197,7 +220,7 @@ class _AddProductState extends State<AddProduct> {
           size: int.parse(size.text),
           price: double.parse(price.text),
           description: description.text,
-          imagePath: 'assets/images/image_icon.png');
+          imagePath: imagePath);
       productList.add(product);
     }
   }

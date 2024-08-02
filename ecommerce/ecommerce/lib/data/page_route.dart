@@ -1,4 +1,3 @@
-
 import 'package:ecommerce/model/product_model.dart';
 import 'package:ecommerce/view/add_product.dart';
 import 'package:ecommerce/view/home_page.dart';
@@ -14,7 +13,7 @@ final goRoute = GoRouter(
       path: '/home',
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
-        child:const HomePage(),
+        child: const HomePage(),
         transitionDuration: const Duration(milliseconds: 300),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0); // Slide from the right
@@ -40,7 +39,7 @@ final goRoute = GoRouter(
       path: '/search',
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
-        child:const SearchPage(),
+        child: const SearchPage(),
         transitionDuration: const Duration(milliseconds: 300),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0); // Slide from the right
@@ -66,7 +65,7 @@ final goRoute = GoRouter(
       path: '/add',
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
-        child:const AddProduct(),
+        child: const AddProduct(),
         transitionDuration: const Duration(milliseconds: 300),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0); // Slide from the right
