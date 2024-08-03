@@ -11,7 +11,7 @@ class SizeView extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      padding:const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       height: height * 0.08,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -19,7 +19,7 @@ class SizeView extends StatelessWidget {
           itemBuilder: (context, index) {
             return Container(
               width: width * 0.13,
-              margin:const EdgeInsets.all(4),
+              margin: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: selectedSize == sizeList[index]

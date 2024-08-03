@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:ecommerce/data/colors.dart';
 import 'package:ecommerce/data/product_list.dart';
+import 'package:ecommerce/data/product_provider.dart';
 import 'package:ecommerce/model/product_model.dart';
 import 'package:ecommerce/widget/filed_button.dart';
 import 'package:ecommerce/widget/input_field.dart';
@@ -10,6 +11,7 @@ import 'package:ecommerce/widget/text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class AddProduct extends StatefulWidget {
   final Product? item;
@@ -184,6 +186,7 @@ class _AddProductState extends State<AddProduct> {
                         name: 'DELETE',
                         width: 1,
                         ontap: () {
+                          print("delete");
                           _deleteProduct();
                           context.go('/home');
                         },
@@ -198,7 +201,7 @@ class _AddProductState extends State<AddProduct> {
 
   void _deleteProduct() {
     if (widget.item != null) {
-      productList.remove(widget.item);
+      context.read<ProductProvider>().addProduct(widget.item!);
     }
   }
 
@@ -211,8 +214,8 @@ class _AddProductState extends State<AddProduct> {
           price: double.parse(price.text),
           description: description.text,
           imagePath: imagePath);
-      productList.remove(widget.item);
-      productList.add(product);
+
+      context.read<ProductProvider>().updateProduct(widget!.item, product);
     } else {
       Product product = Product(
           name: name.text,
@@ -221,7 +224,7 @@ class _AddProductState extends State<AddProduct> {
           price: double.parse(price.text),
           description: description.text,
           imagePath: imagePath);
-      productList.add(product);
+      context.read<ProductProvider>().addProduct(product);
     }
   }
 }

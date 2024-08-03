@@ -1,11 +1,13 @@
 import 'package:ecommerce/data/colors.dart';
 import 'package:ecommerce/data/product_list.dart';
+import 'package:ecommerce/data/product_provider.dart';
 import 'package:ecommerce/model/product_model.dart';
 import 'package:ecommerce/widget/filed_button.dart';
 import 'package:ecommerce/widget/red_outlined.dart';
 import 'package:ecommerce/widget/size_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetail extends StatelessWidget {
   final Product item;
@@ -120,7 +122,7 @@ class ProductDetail extends StatelessWidget {
                   RedOutlinedButton(
                     name: 'DELETE',
                     ontap: () {
-                      productList.remove(item);
+                      context.read<ProductProvider>().deleteProduct(item);
                       context.go('/home');
                       debugPrint("${item!.name} has removed");
                     },

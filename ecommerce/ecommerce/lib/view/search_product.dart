@@ -1,10 +1,12 @@
 import 'package:ecommerce/data/colors.dart';
 import 'package:ecommerce/data/product_list.dart';
+import 'package:ecommerce/data/product_provider.dart';
 import 'package:ecommerce/view/bottom_dialog.dart';
 import 'package:ecommerce/widget/input_field.dart';
 import 'package:ecommerce/widget/product_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -29,7 +31,7 @@ class SearchPage extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding:const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 Row(
@@ -66,9 +68,13 @@ class SearchPage extends StatelessWidget {
                 SizedBox(
                   height: height * 0.8,
                   child: ListView.builder(
-                    itemCount: productList.length,
+                    itemCount:
+                        context.watch<ProductProvider>().productList.length,
                     itemBuilder: (context, index) {
-                      return ProductView(item: productList[index]);
+                      return ProductView(
+                          item: context
+                              .watch<ProductProvider>()
+                              .productList[index]);
                     },
                   ),
                 )

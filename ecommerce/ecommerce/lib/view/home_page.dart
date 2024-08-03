@@ -1,10 +1,12 @@
 import 'package:ecommerce/data/colors.dart';
 import 'package:ecommerce/data/product_list.dart';
+import 'package:ecommerce/data/product_provider.dart';
 import 'package:ecommerce/widget/product_view.dart';
 import 'package:ecommerce/widget/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -112,9 +114,13 @@ class _HomePageState extends State<HomePage> {
               ),
               Flexible(
                 child: ListView.builder(
-                  itemCount: productList.length,
+                  itemCount:
+                      context.watch<ProductProvider>().productList.length,
                   itemBuilder: (context, index) {
-                    return ProductView(item: productList[index]);
+                    return ProductView(
+                        item: context
+                            .watch<ProductProvider>()
+                            .productList[index]);
                   },
                 ),
               ),

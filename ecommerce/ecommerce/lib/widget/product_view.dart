@@ -13,11 +13,11 @@ class ProductView extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.go('/detail', extra: item),
       child: Container(
-        margin:const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow:const [
+          boxShadow: const [
             BoxShadow(
               color: AppColors.lightGrey,
               spreadRadius: 2,
@@ -51,7 +51,7 @@ class ProductView extends StatelessWidget {
                 children: [
                   Text(
                     item.name,
-                    style:const TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 20,
                     ),
@@ -59,7 +59,7 @@ class ProductView extends StatelessWidget {
                   const Spacer(),
                   Text(
                     '\$${item.price}',
-                    style:const TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                     ),
@@ -73,20 +73,20 @@ class ProductView extends StatelessWidget {
                 children: [
                   Text(
                     '${item.category}',
-                    style:const TextStyle(
+                    style: const TextStyle(
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
                     ),
                   ),
                   const Spacer(),
-                 const Icon(
+                  const Icon(
                     Icons.star,
                     color: AppColors.golden,
                   ),
                   Text(
                     '(${item.star})',
-                    style:const TextStyle(
+                    style: const TextStyle(
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w400,
                       fontSize: 12,

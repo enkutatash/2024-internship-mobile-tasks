@@ -21,7 +21,7 @@ class RedOutlinedButton extends StatelessWidget {
     double heightMedia = MediaQuery.of(context).size.height;
 
     return InkWell(
-      onTap: () {},
+      onTap: ontap,
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(width: 1, color: AppColors.red),

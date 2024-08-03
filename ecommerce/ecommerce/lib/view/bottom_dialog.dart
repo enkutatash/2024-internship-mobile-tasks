@@ -26,7 +26,7 @@ class BottomDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding:  EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'Category',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
