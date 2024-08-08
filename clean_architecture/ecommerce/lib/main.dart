@@ -13,14 +13,11 @@ import 'package:ecommerce/features/products/domain/usecase/get_all_product_useca
 import 'package:ecommerce/features/products/domain/usecase/get_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/update_product_usecase.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  
- 
 
   runApp(const MyApp());
 }
@@ -31,54 +28,41 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
-  
+  File? _image;
+  String imagePath = '';
 
   late final RemoteDataSource remoteDataSource;
-  late final InternetConnectionChecker connectionChecker;
-  late final NetworkInfoImple networkInfoImple;
-  late final SharedPreferences sharedPreferences;
-  late final LocalDataSource localDataSource;
-  late final ProductRepository productRepository;
+  late final ProductRepositoryImp productRepository;
   late final AddProductUsecase addProductUsecase;
   late final GetAllProductUsecase getAllProductUsecase;
 
   @override
   void initState() {
     super.initState();
-
-    // Initialize dependencies
-    remoteDataSource = RemoteDataSource();
-    connectionChecker = InternetConnectionChecker();
-    networkInfoImple = NetworkInfoImple(connectionChecker: connectionChecker);
-
-    _initializeSharedPreferences();
+    _initializeDependencies();
   }
 
-  Future<void> _initializeSharedPreferences() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    localDataSource = LocalDataSource(sharedPreferences: sharedPreferences);
+  Future<void> _initializeDependencies() async {
+    remoteDataSource = RemoteDataSource(dio: Dio());
+    final sharedPreferences = await SharedPreferences.getInstance();
+    LocalDataSource localDataSource = LocalDataSource(sharedPreferences: sharedPreferences);
     productRepository = ProductRepositoryImp(
       api: remoteDataSource,
-      networkInfo: networkInfoImple,
+      networkInfo: NetworkInfoImple(connectionChecker: InternetConnectionChecker()),
       localSource: localDataSource,
     );
     addProductUsecase = AddProductUsecase(productRepository: productRepository);
-    getAllProductUsecase =
-        GetAllProductUsecase(productRepository: productRepository);
+    getAllProductUsecase = GetAllProductUsecase(productRepository: productRepository);
   }
 
-  File? _image;
-  String imagePath = '';
-
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-     
       setState(() {
         _image = File(pickedFile.path);
         imagePath = pickedFile.path;
-        
       });
     } else {
       debugPrint('No image selected.');
@@ -87,14 +71,13 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _addProduct() async {
     if (_image != null) {
-      ProductModel product = ProductModel.fromjson( {
-    "id": "66b0b23928f63adda72ab39l",
-    "name": "Smart phone x",
-    "description": "Explore phone.",
-    "price": 800,
-    "imageUrl": imagePath
-  });
-      // Assuming product contains the selected image's path
+      final product = ProductModel.fromjson({
+        "id": "66b0b23928f63adda72ab3900",
+        "name": "DIO",
+        "description": "Explore phone.",
+        "price": 800,
+        "imageUrl": imagePath,
+      });
       final result = await addProductUsecase.execute(product);
       debugPrint(result.toString());
     } else {
@@ -104,30 +87,30 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _getAllProducts() async {
     final products = await getAllProductUsecase.execute();
-    print(products);
     debugPrint(products.toString());
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () => _pickImage(ImageSource.gallery),
-                  child: const Text("Upload Image")),
-              ElevatedButton(
-                  onPressed: () => _addProduct(),
-                  child: const Text("Add Product")),
-              ElevatedButton(
-                  onPressed: () => _getAllProducts(),
-                  child: const Text("Get All Products")),
-            ],
-          ),
+        appBar: AppBar(title: const Text('Product Manager')),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _pickImage,
+              child: const Text("Select Image"),
+            ),
+            ElevatedButton(
+              onPressed: _addProduct,
+              child: const Text("Add Product"),
+            ),
+            ElevatedButton(
+              onPressed: _getAllProducts,
+              child: const Text("Get All Products"),
+            ),
+          ],
         ),
       ),
     );
