@@ -6,7 +6,7 @@ import 'package:ecommerce/features/products/data/data_source/local_source.dart';
 import 'package:ecommerce/features/products/data/model/product_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocalDataSource extends LocalSource{
+class LocalDataSource extends LocalSource {
   final SharedPreferences sharedPreferences;
 
   LocalDataSource({required this.sharedPreferences});
@@ -15,6 +15,7 @@ class LocalDataSource extends LocalSource{
   Future<Either<Failure, List<ProductModel>>> getSavedProducts() async {
     try {
       // SharedPreferences prefs = await SharedPreferences.getInstance();
+
       String? productsjson = sharedPreferences.getString('productslist');
       if (productsjson == null) {
         return const Right([]);
@@ -46,4 +47,3 @@ class LocalDataSource extends LocalSource{
     }
   }
 }
-

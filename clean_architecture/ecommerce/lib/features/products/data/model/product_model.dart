@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
 
 class ProductModel extends ProductEntity {
@@ -14,12 +16,12 @@ class ProductModel extends ProductEntity {
             price: price,
             description: description);
 
-  factory ProductModel.fromjson(Map<String, dynamic> json) {
+   factory ProductModel.fromjson(Map<String, dynamic> json) {
     return ProductModel(
         id: json['id'],
         name: json['name'],
         description: json['description'],
-        price: json['price'],
+        price: (json['price']),
         imageUrl: json['imageUrl']);
   }
 
@@ -29,7 +31,7 @@ class ProductModel extends ProductEntity {
       'name': name,
       'description': description,
       'imageUrl': imageUrl,
-      'price': price,
+      'price': price.toString(),
     };
   }
 }
