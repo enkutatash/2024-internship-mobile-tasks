@@ -63,7 +63,10 @@ void main() {
     when(() => mockDio.get('$apiKey/products')).thenThrow(Exception());
     final res = await remoteDataSource.getAllProducts();
 
-    res.fold((left) => {expect(left, Failure(message: "Exception Failed to fetch Data"))}, (r) => {});
+    res.fold(
+        (left) =>
+            {expect(left, Failure(message: "Exception Failed to fetch Data"))},
+        (r) => {});
   });
 
   test('should add new product', () async {
@@ -97,14 +100,17 @@ void main() {
     expect(result, equals(const Right(null)));
   });
 
-  test('should return failure if no connection for deleteing product', () async {
-    when(() => mockDio.delete('$apiKey/products/${ans.id}')).thenThrow(Exception());
+  test('should return failure if no connection for deleteing product',
+      () async {
+    when(() => mockDio.delete('$apiKey/products/${ans.id}'))
+        .thenThrow(Exception());
     final res = await remoteDataSource.deleteProduct(ans.id);
 
-    res.fold((left) => {expect(left, Failure(message: "Exception Failed to Delete Data"))}, (r) => {});
+    res.fold(
+        (left) =>
+            {expect(left, Failure(message: "Exception Failed to Delete Data"))},
+        (r) => {});
   });
-
-
 
   test('should update the product', () async {
     when(() => mockDio.put('$apiKey/products/${ans.id}', data: ans.toJson()))
@@ -114,13 +120,16 @@ void main() {
     res.fold((left) => Failure(message: "fail"), (r) => {expect(r, ans)});
   });
 
-   test('should return failure if no connection for updating product', () async {
-    when(() => mockDio.put('$apiKey/products/${ans.id}', data: ans.toJson())).thenThrow(Exception());
+  test('should return failure if no connection for updating product', () async {
+    when(() => mockDio.put('$apiKey/products/${ans.id}', data: ans.toJson()))
+        .thenThrow(Exception());
     final res = await remoteDataSource.updateProduct(ans);
 
-    res.fold((left) => {expect(left, Failure(message: "Exception Failed to Update Data"))}, (r) => {});
+    res.fold(
+        (left) =>
+            {expect(left, Failure(message: "Exception Failed to Update Data"))},
+        (r) => {});
   });
-
 
   test('should return the product model', () async {
     when(() => mockDio.get('$apiKey/products/${ans.id}'))
@@ -131,9 +140,13 @@ void main() {
   });
 
   test('should return failure if no connection for getting product', () async {
-    when(() => mockDio.get('$apiKey/products/${ans.id}')).thenThrow(Exception());
+    when(() => mockDio.get('$apiKey/products/${ans.id}'))
+        .thenThrow(Exception());
     final res = await remoteDataSource.getProduct(ans.id);
 
-    res.fold((left) => {expect(left, Failure(message: "Exception Failed to fetch Data"))}, (r) => {});
+    res.fold(
+        (left) =>
+            {expect(left, Failure(message: "Exception Failed to fetch Data"))},
+        (r) => {});
   });
 }

@@ -3,22 +3,17 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:ecommerce/core/network/network.dart';
 import 'package:ecommerce/features/products/data/data_source/local_data_source.dart';
-import 'package:ecommerce/features/products/data/data_source/remote_api.dart';
 import 'package:ecommerce/features/products/data/data_source/remote_data_source.dart';
 import 'package:ecommerce/features/products/data/model/product_model.dart';
 import 'package:ecommerce/features/products/data/repository/product_repository_imp.dart';
-import 'package:ecommerce/features/products/domain/repository/product_repository.dart';
 import 'package:ecommerce/features/products/domain/usecase/add_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/get_all_product_usecase.dart';
-import 'package:ecommerce/features/products/domain/usecase/get_product_usecase.dart';
-import 'package:ecommerce/features/products/domain/usecase/update_product_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-
   runApp(const MyApp());
 }
 
@@ -47,18 +42,22 @@ class _MyAppState extends State<MyApp> {
   Future<void> _initializeDependencies() async {
     remoteDataSource = RemoteDataSource(dio: Dio());
     final sharedPreferences = await SharedPreferences.getInstance();
-    LocalDataSource localDataSource = LocalDataSource(sharedPreferences: sharedPreferences);
+    LocalDataSource localDataSource =
+        LocalDataSource(sharedPreferences: sharedPreferences);
     productRepository = ProductRepositoryImp(
       api: remoteDataSource,
-      networkInfo: NetworkInfoImple(connectionChecker: InternetConnectionChecker()),
+      networkInfo:
+          NetworkInfoImple(connectionChecker: InternetConnectionChecker()),
       localSource: localDataSource,
     );
     addProductUsecase = AddProductUsecase(productRepository: productRepository);
-    getAllProductUsecase = GetAllProductUsecase(productRepository: productRepository);
+    getAllProductUsecase =
+        GetAllProductUsecase(productRepository: productRepository);
   }
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
@@ -73,7 +72,7 @@ class _MyAppState extends State<MyApp> {
     if (_image != null) {
       final product = ProductModel.fromjson({
         "id": "66b0b23928f63adda72ab3900",
-        "name": "DIO",
+        "name": "Samsung",
         "description": "Explore phone.",
         "price": 800,
         "imageUrl": imagePath,

@@ -42,8 +42,8 @@ class RemoteDataSource extends Api {
   @override
   Future<Either<Failure, ProductModel>> addProduct(ProductModel product) async {
     try {
-      ByteData imageData = await rootBundle.load(File(product.imageUrl).path);
-      List<int> imageBytes = imageData.buffer.asUint8List();
+      File imageFile = File(product.imageUrl);
+      List<int> imageBytes = await imageFile.readAsBytes();
 
       FormData formData = FormData.fromMap({
         'name': product.name,
