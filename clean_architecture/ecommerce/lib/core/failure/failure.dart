@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class Failure extends Equatable {
   String message;
   Failure({required this.message});

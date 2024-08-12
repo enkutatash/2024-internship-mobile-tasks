@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -8,8 +6,7 @@ import 'package:ecommerce/core/constants/constants.dart';
 import 'package:ecommerce/core/failure/failure.dart';
 import 'package:ecommerce/features/products/data/data_source/remote_api.dart';
 import 'package:ecommerce/features/products/data/model/product_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:http_parser/http_parser.dart';
 
 class RemoteDataSource extends Api {
@@ -19,22 +16,26 @@ class RemoteDataSource extends Api {
   @override
   Future<Either<Failure, List<ProductModel>>> getAllProducts() async {
     try {
+     
       final response = await dio.get('$apiKey/products');
-
       if (response.statusCode == 200) {
         final List<ProductModel> products = [];
         final Map<String, dynamic> data = response.data;
-
         final product = data['data'];
-        product.forEach((element) {
-          products.add(ProductModel.fromjson(element));
-        });
 
+        product.forEach((element) {
+          
+          products.add(ProductModel.fromjson(element));
+         
+        });
+        
         return Right(products);
       } else {
+        print("failed");
         return Left(Failure(message: "Failed to fetch"));
       }
     } catch (e) {
+      print("error $e");
       return Left(Failure(message: "$e Failed to fetch Data"));
     }
   }
@@ -48,7 +49,7 @@ class RemoteDataSource extends Api {
       FormData formData = FormData.fromMap({
         'name': product.name,
         'description': product.description,
-        'price': 120,
+        'price': product.price,
         'image': MultipartFile.fromBytes(
           imageBytes,
           filename: 'images.png',
