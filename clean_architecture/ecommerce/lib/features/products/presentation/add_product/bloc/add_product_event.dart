@@ -1,7 +1,7 @@
 part of 'add_product_bloc.dart';
 
-@immutable
 sealed class AddProductEvent {}
+
 
 class OnImageChanged extends AddProductEvent {
   final String imageUrl;
@@ -27,17 +27,9 @@ class OnPriceChanged extends AddProductEvent {
   OnPriceChanged({required this.price});
 }
 
-class OnSubmit extends AddProductEvent {
-  final String imageUrl;
-  final String name;
-  final String description;
-  final double price;
+class OnSubmit extends AddProductEvent {}
 
-  OnSubmit({
-    required this.imageUrl,
-    required this.name,
-    required this.description,
-    required this.price,
-  });
-}
+
+
+
 

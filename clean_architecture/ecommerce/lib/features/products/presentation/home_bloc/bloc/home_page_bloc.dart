@@ -1,16 +1,19 @@
 import 'dart:async';
 
+import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
+import 'package:ecommerce/features/products/domain/usecase/add_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/get_all_product_usecase.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_event.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc({required GetAllProductUsecase getAllProductUsecase})
+  
+  HomePageBloc(
+      {required GetAllProductUsecase getAllProductUsecase,})
       : _getAllProductUsecase = getAllProductUsecase,
         super(const HomePageState()) {
     on<FetchAllProducts>(fetchProduct);
-    // on<FetchAdditionalProducts>(fetchAdditionalProducts);
   }
 
   final GetAllProductUsecase _getAllProductUsecase;
@@ -29,12 +32,10 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
           ));
         },
         (products) {
-        
           emit(state.copyWith(
             status: HomePageStatus.success,
             productEntity: products,
           ));
-         
         },
       );
     } catch (e) {
@@ -43,9 +44,4 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       ));
     }
   }
-
-  // FutureOr<void> fetchAdditionalProducts(
-  //     FetchAdditionalProducts event, Emitter<HomePageState> emit) {
-  //   emit(state.copyWith(status: HomePageStatus.loading));
-  //     }
 }

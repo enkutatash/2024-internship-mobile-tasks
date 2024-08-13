@@ -148,7 +148,12 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: AppColors.purple,
-        onPressed: () {},
+        onPressed: () {
+          final result = Navigator.pushNamed(context, "/add_product");
+           if (result == true) {
+            context.read<HomePageBloc>().add(FetchAllProducts());
+          }
+        },
         child: const Icon(
           Icons.add,
           color: AppColors.white,

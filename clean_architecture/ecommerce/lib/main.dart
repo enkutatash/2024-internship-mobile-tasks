@@ -4,8 +4,11 @@ import 'package:ecommerce/core/network/network.dart';
 import 'package:ecommerce/features/products/data/data_source/local_data_source.dart';
 import 'package:ecommerce/features/products/data/data_source/remote_data_source.dart';
 import 'package:ecommerce/features/products/data/repository/product_repository_imp.dart';
+import 'package:ecommerce/features/products/domain/usecase/add_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/get_all_product_usecase.dart';
+import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_bloc.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
+import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
 import 'package:ecommerce/features/products/presentation/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,16 +53,22 @@ Future<void> main() async {
 
   GetAllProductUsecase getAllroductUsecase =
       GetAllProductUsecase(productRepository: productRepositoryImp);
+  
+  AddProductUsecase addProductUsecase = AddProductUsecase(productRepository: productRepositoryImp);
 
   runApp(MainScreen(
     getAllProductUsecase: getAllroductUsecase,
+    addProductUsecase: addProductUsecase,
   ));
 }
 
 // ignore: must_be_immutable
 class MainScreen extends StatelessWidget {
   GetAllProductUsecase getAllProductUsecase;
-  MainScreen({required this.getAllProductUsecase, super.key});
+  AddProductUsecase addProductUsecase;
+  MainScreen({required this.getAllProductUsecase,
+  required this.addProductUsecase,
+   super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +80,11 @@ class MainScreen extends StatelessWidget {
               create: (context) =>
                   HomePageBloc(getAllProductUsecase: getAllProductUsecase),
               child: const HomePage(),
+            ),
+         '/add_product': (context) => BlocProvider(
+              create: (context) =>
+                  AddProductBloc(addProductUsecase: addProductUsecase),
+              child: const AddProductPage(),
             ),
       },
     );

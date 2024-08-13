@@ -7,5 +7,3 @@ abstract class HomePageEvent extends Equatable {
 
 class FetchAllProducts extends HomePageEvent {}
 
-
-

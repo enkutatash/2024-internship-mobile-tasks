@@ -1,18 +1,15 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
 import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerce/features/products/domain/usecase/add_product_usecase.dart';
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'add_product_event.dart';
-part 'add_product_state.dart';
 
 class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
   AddProductUsecase addProductUsecase;
-  AddProductBloc({required this.addProductUsecase}) : super(AddProductState()) {
+  AddProductBloc({required this.addProductUsecase}) : super(const AddProductState()) {
     on<OnNamedChanged>(_nameChange);
     on<OnDescriptionChanged>(_descriptionChange);
     on<OnImageChanged>(_imageChange);
@@ -41,7 +38,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
   }
 
   FutureOr<void> _submit(OnSubmit event, Emitter<AddProductState> emit) async {
-    emit(state.copyWith(status: AddProductStatus.loading));
+    emit(state.copyWith(status: AddProductPageStatus.loading));
     final product = ProductEntity(
       name: state.name,
       description: state.description,
@@ -50,14 +47,17 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
     );
     try {
       final either = await addProductUsecase.execute(product);
-
+      
       either.fold((failure) {
-        emit(state.copyWith(status: AddProductStatus.failure));
+        print("failed bloc");
+        emit(state.copyWith(status: AddProductPageStatus.failure));
       }, (success) {
-        emit(state.copyWith(status: AddProductStatus.success));
+        print("success bloc");
+        emit(state.copyWith(status: AddProductPageStatus.success));
       });
     } catch (e) {
-      emit(state.copyWith(status: AddProductStatus.failure));
+      print("error bloc $e");
+      emit(state.copyWith(status: AddProductPageStatus.failure));
     }
   }
 }

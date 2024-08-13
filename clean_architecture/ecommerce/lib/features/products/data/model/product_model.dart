@@ -14,6 +14,16 @@ class ProductModel extends ProductEntity {
             price: price,
             description: description);
 
+  factory ProductModel.fromEntity(ProductEntity entity) {
+    return ProductModel(
+        id: entity.id,
+        name: entity.name,
+        description: entity.description,
+        price: entity.price,
+        imageUrl: entity.imageUrl
+    );
+  }
+
   factory ProductModel.fromjson(Map<String, dynamic> json) {
    
     return ProductModel(

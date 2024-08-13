@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 
 enum HomePageStatus { initial, loading, success, failure }
 
+
+
 class HomePageState extends Equatable {
   final HomePageStatus status;
   final List<ProductEntity> productEntity;
@@ -25,4 +27,3 @@ class HomePageState extends Equatable {
   @override
   List<Object?> get props => [status, productEntity];
 }
-

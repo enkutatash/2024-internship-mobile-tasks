@@ -36,7 +36,8 @@ class ProductRepositoryImp implements ProductRepository {
 
   Future<Either<Failure, ProductModel>> addProduct(product) async {
     if (await networkInfo.isConnected) {
-      var res = await api.addProduct(product);
+      var convert = ProductModel.fromEntity(product);
+      var res = await api.addProduct(convert);
       return res;
     }
     return Left(Failure(message: "No Internet Connection"));
