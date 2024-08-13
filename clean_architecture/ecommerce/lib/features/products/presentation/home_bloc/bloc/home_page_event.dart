@@ -16,3 +16,4 @@ class DeleteProduct extends HomePageEvent {
   List<Object?> get props => [id];
 }
 
+

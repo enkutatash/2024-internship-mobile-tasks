@@ -58,4 +58,6 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       emit(state.copyWith(status: HomePageStatus.failure));
     }
   }
+
+  
 }

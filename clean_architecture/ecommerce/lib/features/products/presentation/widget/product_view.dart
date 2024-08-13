@@ -78,14 +78,6 @@ class ProductView extends StatelessWidget {
               padding: EdgeInsets.only(left: 8.0, right: 8),
               child: Row(
                 children: [
-                  Text(
-                    "Male Shoes",
-                    style: TextStyle(
-                      color: AppColors.textGrey,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                    ),
-                  ),
                   Spacer(),
                   Icon(
                     Icons.star,

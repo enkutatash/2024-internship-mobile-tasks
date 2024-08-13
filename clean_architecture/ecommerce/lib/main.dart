@@ -12,6 +12,7 @@ import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_pag
 import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
 import 'package:ecommerce/features/products/presentation/page/detail_product_page.dart';
 import 'package:ecommerce/features/products/presentation/page/home_page.dart';
+import 'package:ecommerce/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -41,41 +42,21 @@ class ProductObserver extends BlocObserver {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  RemoteDataSource remoteDataSource = RemoteDataSource(dio: Dio());
-  final sharedPreferences = await SharedPreferences.getInstance();
-  LocalDataSource localDataSource =
-      LocalDataSource(sharedPreferences: sharedPreferences);
   Bloc.observer = ProductObserver();
 
-  ProductRepositoryImp productRepositoryImp = ProductRepositoryImp(
-      api: remoteDataSource,
-      networkInfo:
-          NetworkInfoImple(connectionChecker: InternetConnectionChecker()),
-      localSource: localDataSource);
+  await setUp();
+  
 
-  GetAllProductUsecase getAllroductUsecase =
-      GetAllProductUsecase(productRepository: productRepositoryImp);
-
-  AddProductUsecase addProductUsecase =
-      AddProductUsecase(productRepository: productRepositoryImp);
-    DeleteProductUsecase deleteProductUsecase = DeleteProductUsecase(productRepository: productRepositoryImp);
-
+ 
   runApp(MainScreen(
-    getAllProductUsecase: getAllroductUsecase,
-    addProductUsecase: addProductUsecase,
-    deleteProductUsecase: deleteProductUsecase,
   ));
 }
 
 // ignore: must_be_immutable
 class MainScreen extends StatelessWidget {
-  GetAllProductUsecase getAllProductUsecase;
-  AddProductUsecase addProductUsecase;
-  DeleteProductUsecase deleteProductUsecase;
+ 
   MainScreen(
-      {required this.deleteProductUsecase,
-      required this.getAllProductUsecase,
-      required this.addProductUsecase,
+      {
       super.key});
 
   @override
@@ -88,13 +69,17 @@ class MainScreen extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (context) => HomePageBloc(
-                deleteProductUsecase: deleteProductUsecase,
-                getAllProductUsecase: getAllProductUsecase,
+                deleteProductUsecase: locator<DeleteProductUsecase>(),
+                getAllProductUsecase: locator<GetAllProductUsecase>(),
               )..add(FetchAllProducts()),
             ),
             BlocProvider(
               create: (context) => AddProductBloc(
-                addProductUsecase: addProductUsecase,
+                homePageBloc: HomePageBloc(
+                  deleteProductUsecase: locator<DeleteProductUsecase>(),
+                  getAllProductUsecase: locator<GetAllProductUsecase>(),
+                ),
+                addProductUsecase: locator<AddProductUsecase>(),
               ),
             ),
           ],
@@ -109,20 +94,3 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   initialRoute: '/',
-    //   routes: {
-    //     '/': (context) => BlocProvider(
-    //           create: (context) =>
-    //               HomePageBloc(getAllProductUsecase: getAllProductUsecase)..add(FetchAllProducts()),
-    //           child: const HomePage(),
-    //         ),
-    //      '/add_product': (context) => BlocProvider(
-    //           create: (context) =>
-    //               AddProductBloc(addProductUsecase: addProductUsecase),
-    //           child: const AddProductPage(),
-    //         ),
-    //   },
-    // );

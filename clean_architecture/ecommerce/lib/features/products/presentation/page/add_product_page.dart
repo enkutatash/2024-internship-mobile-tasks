@@ -146,8 +146,7 @@ class AddProductPage extends StatelessWidget {
                     width: 1,
                     ontap: () {
                       context.read<AddProductBloc>().add(OnSubmit());
-                      context.read<HomePageBloc>().add(FetchAllProducts());
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/');
                     },
                   )),
               SizedBox(
