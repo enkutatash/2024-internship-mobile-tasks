@@ -5,6 +5,7 @@ import 'package:ecommerce/features/products/domain/entities/product_entity.dart'
 import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_bloc.dart';
 import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_state.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
+import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_event.dart';
 import 'package:ecommerce/features/products/presentation/widget/button_fields.dart';
 import 'package:ecommerce/features/products/presentation/widget/input_field.dart';
 import 'package:ecommerce/features/products/presentation/widget/red_button.dart';
@@ -145,7 +146,8 @@ class AddProductPage extends StatelessWidget {
                     width: 1,
                     ontap: () {
                       context.read<AddProductBloc>().add(OnSubmit());
-                      Navigator.pop(context, true);
+                      context.read<HomePageBloc>().add(FetchAllProducts());
+                      Navigator.pop(context);
                     },
                   )),
               SizedBox(

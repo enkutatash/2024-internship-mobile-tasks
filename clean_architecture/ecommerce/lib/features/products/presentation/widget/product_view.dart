@@ -1,5 +1,6 @@
 import 'package:ecommerce/core/constants/colors.dart';
 import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
+import 'package:ecommerce/features/products/presentation/page/detail_product_page.dart';
 import 'package:flutter/material.dart';
 
 class ProductView extends StatelessWidget {
@@ -10,13 +11,20 @@ class ProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetail(
+                      item: product,
+                    )));
+      },
       child: Container(
         margin: EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow:const [
+          boxShadow: const [
             BoxShadow(
               color: AppColors.lightGrey,
               spreadRadius: 2,
@@ -50,7 +58,7 @@ class ProductView extends StatelessWidget {
                 children: [
                   Text(
                     product.name,
-                    style:const TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 20,
                     ),
@@ -58,7 +66,7 @@ class ProductView extends StatelessWidget {
                   const Spacer(),
                   Text(
                     "\$${product.price}",
-                    style:const TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                     ),
@@ -66,8 +74,8 @@ class ProductView extends StatelessWidget {
                 ],
               ),
             ),
-          const  Padding(
-              padding:  EdgeInsets.only(left: 8.0, right: 8),
+            const Padding(
+              padding: EdgeInsets.only(left: 8.0, right: 8),
               child: Row(
                 children: [
                   Text(
@@ -78,8 +86,8 @@ class ProductView extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                   Spacer(),
-                   Icon(
+                  Spacer(),
+                  Icon(
                     Icons.star,
                     color: AppColors.golden,
                   ),

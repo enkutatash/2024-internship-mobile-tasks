@@ -7,3 +7,12 @@ abstract class HomePageEvent extends Equatable {
 
 class FetchAllProducts extends HomePageEvent {}
 
+class DeleteProduct extends HomePageEvent {
+  final String id;
+
+  DeleteProduct({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}
+
