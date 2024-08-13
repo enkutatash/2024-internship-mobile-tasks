@@ -2,13 +2,13 @@ import 'package:ecommerce/features/products/domain/entities/product_entity.dart'
 
 class ProductModel extends ProductEntity {
   ProductModel({
-    required String id,
+    String? id,
     required String name,
     required String imageUrl,
     required int price,
     required String description,
   }) : super(
-            id: id,
+            id: id ?? "",
             name: name,
             imageUrl: imageUrl,
             price: price,

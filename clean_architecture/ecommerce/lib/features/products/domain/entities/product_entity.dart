@@ -9,7 +9,7 @@ class ProductEntity extends Equatable {
   String description;
 
   ProductEntity(
-      {required this.id,
+      { this.id = "",
       required this.name,
       required this.description,
       required this.price,

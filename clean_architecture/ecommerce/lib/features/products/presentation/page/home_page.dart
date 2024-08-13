@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomePageBloc>().add(FetchAllProducts());
     });
     double width = MediaQuery.of(context).size.width;
@@ -116,23 +116,28 @@ class HomePage extends StatelessWidget {
               ),
               BlocBuilder<HomePageBloc, HomePageState>(
                 builder: (context, state) {
-                  if(state.productEntity.isEmpty){
-                    if(state.status == HomePageStatus.loading){
+                  if (state.productEntity.isEmpty) {
+                    if (state.status == HomePageStatus.loading) {
                       return const Center(child: CupertinoActivityIndicator());
-                    }else if (state.status != HomePageStatus.success){
+                    } else if (state.status != HomePageStatus.success) {
                       return const Center(child: Text("Failed to load data"));
-                    }else{
-                      return const Center(child: Text("No Product is available"));
+                    } else {
+                      return const Center(
+                          child: Text("No Product is available"));
                     }
                   }
-                  
-                  return SizedBox(
-                    height: height * 0.7,
-                    child: ListView(children: [
-                      for(var product in state.productEntity)
-                        ProductView(product: product,)
+
+                  return Expanded(
+                    // height: height * 0.7,
+                    child: ListView(
+                      children: [
+                        for (var product in state.productEntity)
+                          ProductView(
+                            product: product,
+                          )
                         // Text(product.name)
-                    ],),
+                      ],
+                    ),
                   );
                 },
               ),
