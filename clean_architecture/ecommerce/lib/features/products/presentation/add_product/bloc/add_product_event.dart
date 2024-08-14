@@ -1,43 +1,43 @@
-part of 'add_product_bloc.dart';
+// part of 'add_product_bloc.dart';
 
-@immutable
-sealed class AddProductEvent {}
+// @immutable
+// sealed class AddProductEvent {}
 
-class AddProduct extends AddProductEvent {
-  final String name;
-  final String description;
-  final double price;
-  final String imageUrl;
+// class AddProductPress extends AddProductEvent {
+//   final String name;
+//   final String description;
+//   final double price;
+//   final String imageUrl;
 
-  AddProduct({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.imageUrl,
-  });
-}
+//   AddProductPress({
+//     required this.name,
+//     required this.description,
+//     required this.price,
+//     required this.imageUrl,
+//   });
+// }
 
-class OnImageChanged extends AddProductEvent {
-  final String imageUrl;
+// class OnImageChanged extends AddProductEvent {
+//   final String imageUrl;
 
-  OnImageChanged({required this.imageUrl});
-}
+//   OnImageChanged({required this.imageUrl});
+// }
 
-class OnNamedChanged extends AddProductEvent {
-  final String name;
+// class OnNamedChanged extends AddProductEvent {
+//   final String name;
 
-  OnNamedChanged({required this.name});
-}
+//   OnNamedChanged({required this.name});
+// }
 
-class OnDescriptionChanged extends AddProductEvent {
-  final String description;
+// class OnDescriptionChanged extends AddProductEvent {
+//   final String description;
 
-  OnDescriptionChanged({required this.description});
-}
+//   OnDescriptionChanged({required this.description});
+// }
 
-class OnPriceChanged extends AddProductEvent {
-  final double price;
+// class OnPriceChanged extends AddProductEvent {
+//   final double price;
 
-  OnPriceChanged({required this.price});
-}
+//   OnPriceChanged({required this.price});
+// }
 

@@ -2,22 +2,24 @@ import 'dart:io';
 
 import 'package:ecommerce/core/constants/colors.dart';
 import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
+import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_bloc.dart';
+import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
 import 'package:ecommerce/features/products/presentation/widget/button_fields.dart';
 import 'package:ecommerce/features/products/presentation/widget/input_field.dart';
 import 'package:ecommerce/features/products/presentation/widget/red_button.dart';
 import 'package:ecommerce/features/products/presentation/widget/text_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProductPage extends StatefulWidget {
- final ProductEntity? item;
+  final ProductEntity? item;
   const AddProductPage({this.item, super.key});
   @override
   State<AddProductPage> createState() => _AddProductPageState();
 }
 
 class _AddProductPageState extends State<AddProductPage> {
- 
   TextEditingController name = TextEditingController();
   TextEditingController category = TextEditingController();
   TextEditingController price = TextEditingController();
@@ -85,19 +87,23 @@ class _AddProductPageState extends State<AddProductPage> {
                       color: AppColors.lightGrey),
                   child: Stack(
                     children: [
-                      if (imagePath.startsWith('http'))
-                        Image.network(
-                          imagePath,
-                          width: double.infinity,
-                          height: height * 0.2,
-                          fit: BoxFit.cover,
-                        )
+                      if (imagePath != null && imagePath!.isNotEmpty)
+                        imagePath!.startsWith('http')
+                            ? Image.network(
+                                imagePath!,
+                                width: double.infinity,
+                                height: height * 0.2,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(imagePath!),
+                                width: double.infinity,
+                                height: height * 0.2,
+                                fit: BoxFit.cover,
+                              )
                       else
-                        Image.file(
-                          File(imagePath),
-                          width: double.infinity,
-                          height: height * 0.2,
-                          fit: BoxFit.cover,
+                        const Center(
+                          child: Text("No image available"),
                         ),
                       Positioned(
                         right: 10,
@@ -152,9 +158,29 @@ class _AddProductPageState extends State<AddProductPage> {
                   padding:
                       const EdgeInsets.only(left: 15.0, right: 15, top: 10),
                   child: FiledButton(
-                    name: 'Add',
+                    // ignore: unnecessary_null_comparison
+                    name: widget.item != null ? 'Update' : 'Add',
                     width: 1,
-                    ontap: () {},
+                    ontap: () {
+                      if (widget.item != null) {
+                         
+                          context.read<HomePageBloc>().add(UpdateProductPress(
+                          id: widget.item!.id,
+                          description: description.text,
+                          name: name.text,
+                          price: double.parse(price.text),
+                          imageUrl: imagePath));
+                      
+                      } else {
+                        context.read<HomePageBloc>().add(AddProductPress(
+                          description: description.text,
+                          name: name.text,
+                          price: double.parse(price.text),
+                          imageUrl: imagePath));
+                        
+                      }
+                     Navigator.pushNamed(context, '/');
+                    },
                   )),
               SizedBox(
                 height: height * 0.012,
@@ -166,7 +192,12 @@ class _AddProductPageState extends State<AddProductPage> {
                       child: RedOutlinedButton(
                         name: 'DELETE',
                         width: 1,
-                        ontap: () {},
+                        ontap: () {
+                          context
+                              .read<HomePageBloc>()
+                              .add(DeleteProduct(id: widget.item!.id));
+                          Navigator.pushNamed(context, '/');
+                        },
                       ))
                   : const SizedBox(),
             ],

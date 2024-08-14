@@ -13,6 +13,7 @@ import 'package:ecommerce/features/products/domain/usecase/delete_product_usecas
 import 'package:ecommerce/features/products/domain/usecase/get_all_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/get_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/update_product_usecase.dart';
+import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -50,4 +51,11 @@ Future<void> setUp() async {
       DeleteProductUsecase(productRepository: locator<ProductRepository>()));
   locator.registerLazySingleton<UpdateProductUsecase>(() =>
       UpdateProductUsecase(productRepository: locator<ProductRepository>()));
+
+  locator.registerLazySingleton<HomePageBloc>(()=>HomePageBloc(
+    updateProductUsecase: locator<UpdateProductUsecase>(),
+    addProductUsecase: locator<AddProductUsecase>(),
+    deleteProductUsecase: locator<DeleteProductUsecase>(),
+    getAllProductUsecase: locator<GetAllProductUsecase>(),
+  ));
 }

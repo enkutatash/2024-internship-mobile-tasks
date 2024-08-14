@@ -60,6 +60,7 @@ class ProductRepositoryImp implements ProductRepository {
     if (await networkInfo.isConnected) {
       var convert = ProductModel.fromEntity(product);
       var res = await api.addProduct(convert);
+      
       return res;
     }
     return Left(Failure(message: "No Internet Connection"));

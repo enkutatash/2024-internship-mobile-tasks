@@ -8,6 +8,7 @@ import 'package:ecommerce/features/products/domain/usecase/add_product_usecase.d
 import 'package:ecommerce/features/products/domain/usecase/delete_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/get_all_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/update_product_usecase.dart';
+import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_bloc.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
 import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
 import 'package:ecommerce/features/products/presentation/page/home_page.dart';
@@ -61,9 +62,10 @@ class MainScreen extends StatelessWidget {
       builder: (context, child) {
         return BlocProvider(
           create: (context) => HomePageBloc(
+            updateProductUsecase: locator<UpdateProductUsecase>(),
             deleteProductUsecase: locator<DeleteProductUsecase>(),
             getAllProductUsecase: locator<GetAllProductUsecase>(),
-            // addProductUsecase: locator<AddProductUsecase>(),
+            addProductUsecase: locator<AddProductUsecase>(),
             // update: locator<UpdateProductUsecase>(),
           )..add(FetchAllProducts()),
           child: child!,
@@ -73,6 +75,18 @@ class MainScreen extends StatelessWidget {
         '/': (context) => const HomePage(),
        '/add_product': (context) =>const AddProductPage(),
       },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/update') {
+          final item = settings.arguments as ProductEntity?;
+          return MaterialPageRoute(
+            builder: (context) {
+              return AddProductPage(item: item);
+            },
+          );
+        }
+        return null;
+      },
+
       // onGenerateRoute: (settings) {
       //   if (settings.name == '/update') {
       //     final item = settings.arguments as ProductEntity?;
