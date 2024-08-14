@@ -12,37 +12,51 @@ class LocalDataSource extends LocalSource {
   LocalDataSource({required this.sharedPreferences});
 
   @override
-  Future<Either<Failure, List<ProductModel>>> getSavedProducts() async {
-    try {
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? productsjson = sharedPreferences.getString('productslist');
-      if (productsjson == null) {
-        return const Right([]);
-      }
-      List<Map<String, dynamic>> productMap = jsonDecode(productsjson);
-      List<ProductModel> products = [];
-      for (var product in productMap) {
-        products.add(ProductModel.fromjson(product));
-      }
-      return Right(products);
-    } catch (e) {
-      return Left(Failure(message: "Failed to get saved products"));
+  Stream<List<ProductModel>> getSavedProducts() async* {
+  try {
+    // Fetching the saved products from shared preferences
+    String? productsJson = sharedPreferences.getString('productslist');
+    
+    // If no products are saved, yield an empty list
+    if (productsJson == null) {
+      yield [];
+      return;
     }
+
+    // Decoding the JSON string into a list of maps
+    List<Map<String, dynamic>> productMap = List<Map<String, dynamic>>.from(jsonDecode(productsJson));
+    
+    // Mapping each map to a ProductModel object
+    List<ProductModel> products = productMap.map((product) => ProductModel.fromjson(product)).toList();
+    
+    // Yielding the list of products
+    yield products;
+  } catch (e) {
+    print("Failed to get saved products: $e");
+    
+    // If an error occurs, yield an empty list
+    yield [];
   }
+}
+
 
   @override
-  Future<Either<Failure, void>> saveData(List<ProductModel> products) async {
-    try {
-      final productsjson = [];
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      for (var product in products) {
-        productsjson.add(product.toJson());
-      }
-      String jsonString = jsonEncode(productsjson);
-      sharedPreferences.setString('productslist', jsonString);
-      return Future.value(const Right(null));
-    } catch (e) {
-      return Left(Failure(message: "Failed to cache data"));
+  Future<Either<Failure, void>> saveData(Stream<List<ProductModel>> productsStream) async {
+  try {
+    // Listen to the stream
+    await for (var products in productsStream) {
+      // Convert the list of ProductModel objects to a JSON string
+      final List<Map<String, dynamic>> productsJson = products.map((product) => product.toJson()).toList();
+      String jsonString = jsonEncode(productsJson);
+      
+      // Save the JSON string to SharedPreferences
+      await sharedPreferences.setString('productslist', jsonString);
     }
+    
+    return const Right(null);
+  } catch (e) {
+    return Left(Failure(message: "Failed to cache data"));
   }
+}
+
 }

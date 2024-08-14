@@ -14,31 +14,29 @@ class RemoteDataSource extends Api {
   RemoteDataSource({required this.dio});
 
   @override
-  Future<Either<Failure, List<ProductModel>>> getAllProducts() async {
-    try {
-     
-      final response = await dio.get('$apiKey/products');
-      if (response.statusCode == 200) {
-        final List<ProductModel> products = [];
-        final Map<String, dynamic> data = response.data;
-        final product = data['data'];
+  Stream<List<ProductModel>> getAllProducts() async* {
+  try {
+    final response = await dio.get('$apiKey/products');
 
-        product.forEach((element) {
-          
-          products.add(ProductModel.fromjson(element));
-         
-        });
-        
-        return Right(products);
-      } else {
-        print("failed");
-        return Left(Failure(message: "Failed to fetch"));
-      }
-    } catch (e) {
-      print("error $e");
-      return Left(Failure(message: "$e Failed to fetch Data"));
+    if (response.statusCode == 200) {
+      final List<ProductModel> products = [];
+      final Map<String, dynamic> data = response.data;
+
+      final product = data['data'];
+      product.forEach((element) {
+        products.add(ProductModel.fromjson(element));
+      });
+
+      yield products;
+    } else {
+      print("Failed to fetch products");
+      yield [];
     }
+  } catch (e) {
+    print("Error occurred: $e");
+    yield []; 
   }
+}
 
   @override
   Future<Either<Failure, ProductModel>> addProduct(ProductModel product) async {

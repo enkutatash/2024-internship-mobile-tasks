@@ -6,6 +6,7 @@ import 'package:ecommerce/features/products/presentation/add_product/bloc/add_pr
 import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_state.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_event.dart';
+import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_state.dart';
 import 'package:ecommerce/features/products/presentation/widget/button_fields.dart';
 import 'package:ecommerce/features/products/presentation/widget/input_field.dart';
 import 'package:ecommerce/features/products/presentation/widget/red_button.dart';
@@ -28,10 +29,14 @@ class AddProductPage extends StatelessWidget {
       final pickedFile = await _picker.pickImage(source: source);
       if (pickedFile != null) {
         context
-            .read<AddProductBloc>()
+            .read<HomePageBloc>()
             .add(OnImageChanged(imageUrl: pickedFile.path));
+
+        await Future.delayed(const Duration(milliseconds: 100));
+        final imageUr = context.read<HomePageBloc>().state.imageUrl;
+        print("image url after pick $imageUr");
       } else {
-        debugPrint('No image selected.');
+        print('No image selected.');
       }
     }
 
@@ -67,16 +72,16 @@ class AddProductPage extends StatelessWidget {
                       color: AppColors.lightGrey),
                   child: Stack(
                     children: [
-                      BlocBuilder<AddProductBloc, AddProductState>(
+                      BlocBuilder<HomePageBloc, HomePageState>(
                           builder: (context, state) {
-                        if (state.imageUrl.isNotEmpty &&
+                        if (state.imageUrl != null &&
                             state.imageUrl !=
                                 "https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg") {
                           return Image.file(
                               width: double.infinity,
                               height: height * 0.2,
                               fit: BoxFit.cover,
-                              File(state.imageUrl));
+                              File(state.imageUrl!));
                         }
 
                         return const Center(
@@ -104,7 +109,7 @@ class AddProductPage extends StatelessWidget {
               ),
               InputField(
                 onChange: (name) => context
-                    .read<AddProductBloc>()
+                    .read<HomePageBloc>()
                     .add(OnNamedChanged(name: name)),
               ),
               SizedBox(
@@ -116,7 +121,7 @@ class AddProductPage extends StatelessWidget {
               ),
               InputField(
                   onChange: (price) => context
-                      .read<AddProductBloc>()
+                      .read<HomePageBloc>()
                       .add(OnPriceChanged(price: double.parse(price))),
                   suffixicon: true,
                   suffix: Icons.attach_money_sharp,
@@ -131,7 +136,7 @@ class AddProductPage extends StatelessWidget {
               ),
               InputField(
                 onChange: (description) => context
-                    .read<AddProductBloc>()
+                    .read<HomePageBloc>()
                     .add(OnDescriptionChanged(description: description)),
                 fieldHeight: 0.25,
               ),
@@ -145,7 +150,9 @@ class AddProductPage extends StatelessWidget {
                     name: 'Add',
                     width: 1,
                     ontap: () {
-                      context.read<AddProductBloc>().add(OnSubmit());
+                      context.read<HomePageBloc>().add(AddProductEvent(
+                          name: "", description: "", price: 30, imageUrl: ""));
+
                       Navigator.pushNamed(context, '/');
                     },
                   )),

@@ -14,16 +14,39 @@ class ProductRepositoryImp implements ProductRepository {
       {required this.api,
       required this.networkInfo,
       required this.localSource});
-  Future<Either<Failure, List<ProductModel>>> getAllProducts() async {
-    if (await networkInfo.isConnected) {
-      var res = await api.getAllProducts();
-      var oldProduct = await localSource.getSavedProducts();
-      localSource.saveData(res.getOrElse(() => oldProduct.getOrElse(() => [])));
-      return res;
-    }
+  @override
+  Stream<List<ProductModel>> getAllProducts() async* {
+  if (await networkInfo.isConnected) {
+    try {
+      // Fetching products from the API
+      var products = await api.getAllProducts();
 
-    return localSource.getSavedProducts();
+      // Assuming 'products' is of type List<ProductModel>
+      yield* products;
+
+      // Save the data locally for offline access
+      await localSource.saveData(products);
+    } catch (e) {
+      print("Failed to get products from API: $e");
+
+      // Fallback to locally saved products in case of failure
+      var localProducts = await localSource.getSavedProducts();
+      yield* localProducts;
+    }
+  } else {
+    try {
+      // When offline, load products from local storage
+      var localProducts =  localSource.getSavedProducts();
+      yield* localProducts;
+    } catch (e) {
+      print("Failed to get products from local storage: $e");
+
+      // Yielding an empty list in case of failure
+      yield [];
+    }
   }
+}
+
 
   Future<Either<Failure, ProductModel>> getProduct(id) async {
     if (await networkInfo.isConnected) {

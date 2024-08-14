@@ -32,6 +32,7 @@ class ProductObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 
   @override
@@ -45,19 +46,13 @@ Future<void> main() async {
   Bloc.observer = ProductObserver();
 
   await setUp();
-  
 
- 
-  runApp(MainScreen(
-  ));
+  runApp(MainScreen());
 }
 
 // ignore: must_be_immutable
 class MainScreen extends StatelessWidget {
- 
-  MainScreen(
-      {
-      super.key});
+  MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,24 +60,12 @@ class MainScreen extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       builder: (context, child) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => HomePageBloc(
-                deleteProductUsecase: locator<DeleteProductUsecase>(),
-                getAllProductUsecase: locator<GetAllProductUsecase>(),
-              )..add(FetchAllProducts()),
-            ),
-            BlocProvider(
-              create: (context) => AddProductBloc(
-                homePageBloc: HomePageBloc(
-                  deleteProductUsecase: locator<DeleteProductUsecase>(),
-                  getAllProductUsecase: locator<GetAllProductUsecase>(),
-                ),
-                addProductUsecase: locator<AddProductUsecase>(),
-              ),
-            ),
-          ],
+        return BlocProvider(
+          create: (context) => HomePageBloc(
+            deleteProductUsecase: locator<DeleteProductUsecase>(),
+            getAllProductUsecase: locator<GetAllProductUsecase>(),
+            addProductUsecase: locator<AddProductUsecase>(),
+          )..add(FetchAllProducts()),
           child: child!,
         );
       },
@@ -93,4 +76,3 @@ class MainScreen extends StatelessWidget {
     );
   }
 }
-

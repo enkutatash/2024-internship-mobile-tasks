@@ -12,9 +12,11 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomePageBloc>().add(FetchAllProducts());
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<HomePageBloc>().add(FetchAllProducts());
+    // });
+
+    
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -116,27 +118,42 @@ class HomePage extends StatelessWidget {
               ),
               BlocBuilder<HomePageBloc, HomePageState>(
                 builder: (context, state) {
-                  if (state.productEntity.isEmpty) {
-                    if (state.status == HomePageStatus.loading) {
-                      return const Center(child: CupertinoActivityIndicator());
-                    } else if (state.status != HomePageStatus.success) {
-                      return const Center(child: Text("Failed to load data"));
-                    } else {
-                      return const Center(
-                          child: Text("No Product is available"));
-                    }
+                  if (state.status == HomePageStatus.loading) {
+                    return const Center(child: CupertinoActivityIndicator());
+                  } else if (state.status == HomePageStatus.failure) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Failed to load data"),
+                          ElevatedButton(
+                            onPressed: () {
+                              context
+                                  .read<HomePageBloc>()
+                                  .add(FetchAllProducts());
+                            },
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state.productEntity.isEmpty) {
+                    return const Center(child: Text("No Product is available"));
                   }
 
                   return Expanded(
-                    // height: height * 0.7,
-                    child: ListView(
-                      children: [
-                        for (var product in state.productEntity)
-                          ProductView(
-                            product: product,
-                          )
-                        // Text(product.name)
-                      ],
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<HomePageBloc>().add(FetchAllProducts());
+                      },
+                      child: ListView(
+                        children: [
+                          for (var product in state.productEntity)
+                            ProductView(
+                              product: product,
+                            ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -150,7 +167,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: AppColors.purple,
         onPressed: () {
           final result = Navigator.pushNamed(context, "/add_product");
-           if (result == true) {
+          if (result == true) {
             context.read<HomePageBloc>().add(FetchAllProducts());
           }
         },

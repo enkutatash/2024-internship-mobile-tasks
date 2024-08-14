@@ -7,7 +7,7 @@ class GetAllProductUsecase {
   final ProductRepository productRepository;
   GetAllProductUsecase({required this.productRepository});
 
-  Future<Either<Failure, List<ProductEntity>>> execute() {
+  Stream<List<ProductEntity>> execute() {
     return productRepository.getAllProducts();
   }
 }

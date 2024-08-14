@@ -4,7 +4,7 @@ import 'package:ecommerce/features/products/data/model/product_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class Api extends Equatable{
-  Future<Either<Failure,List<ProductModel>>> getAllProducts();
+  Stream<List<ProductModel>> getAllProducts();
   Future<Either<Failure, ProductModel>> getProduct(String id);
   Future<Either<Failure, ProductModel>> addProduct(ProductModel product);
   Future<Either<Failure, ProductModel>> updateProduct(ProductModel product);
