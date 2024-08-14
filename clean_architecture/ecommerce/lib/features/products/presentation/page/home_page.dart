@@ -1,7 +1,7 @@
 import 'package:ecommerce/core/constants/colors.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
-import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_event.dart';
-import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_state.dart';
+import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
+import 'package:ecommerce/features/products/presentation/page/loading_page.dart';
 import 'package:ecommerce/features/products/presentation/widget/product_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,6 @@ class HomePage extends StatelessWidget {
     //   context.read<HomePageBloc>().add(FetchAllProducts());
     // });
 
-    
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -119,7 +118,7 @@ class HomePage extends StatelessWidget {
               BlocBuilder<HomePageBloc, HomePageState>(
                 builder: (context, state) {
                   if (state.status == HomePageStatus.loading) {
-                    return const Center(child: CupertinoActivityIndicator());
+                    return const CupertinoActivityIndicator();
                   } else if (state.status == HomePageStatus.failure) {
                     return Center(
                       child: Column(
@@ -137,7 +136,7 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                     );
-                  } else if (state.productEntity.isEmpty) {
+                  } else if (state.products!.isEmpty) {
                     return const Center(child: Text("No Product is available"));
                   }
 
@@ -148,7 +147,7 @@ class HomePage extends StatelessWidget {
                       },
                       child: ListView(
                         children: [
-                          for (var product in state.productEntity)
+                          for (var product in state.products!)
                             ProductView(
                               product: product,
                             ),
@@ -166,10 +165,8 @@ class HomePage extends StatelessWidget {
         shape: const CircleBorder(),
         backgroundColor: AppColors.purple,
         onPressed: () {
-          final result = Navigator.pushNamed(context, "/add_product");
-          if (result == true) {
-            context.read<HomePageBloc>().add(FetchAllProducts());
-          }
+          print("navigat");
+          Navigator.pushNamed(context, '/add_product');
         },
         child: const Icon(
           Icons.add,

@@ -1,7 +1,6 @@
 import 'package:ecommerce/core/constants/colors.dart';
 import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
-import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_event.dart';
 import 'package:ecommerce/features/products/presentation/widget/button_fields.dart';
 import 'package:ecommerce/features/products/presentation/widget/red_button.dart';
 import 'package:flutter/material.dart';
@@ -100,14 +99,21 @@ class ProductDetail extends StatelessWidget {
                     ontap: () {
                       context
                           .read<HomePageBloc>()
-                          .add(DeleteProduct(id: item.id));
+                          .add(DeleteProduct(id:item.id));
                       Navigator.pushNamed(context, '/');
                     },
                   ),
                   const Spacer(),
                   FiledButton(
                     name: 'UPDATE',
-                    ontap: () {},
+                    ontap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/update',
+                        arguments: item,
+                      );
+                      
+                    },
                   )
                 ],
               ),

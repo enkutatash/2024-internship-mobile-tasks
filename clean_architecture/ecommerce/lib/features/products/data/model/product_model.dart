@@ -43,4 +43,12 @@ class ProductModel extends ProductEntity {
       'price': price,
     };
   }
+
+  Map<String, dynamic> forApi() {
+    return {
+      'name': name,
+      'description': description,
+      'price': price.toDouble(),
+    };
+  }
 }

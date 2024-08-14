@@ -1,40 +1,39 @@
+part of 'add_product_bloc.dart';
 
-// import 'package:equatable/equatable.dart';
+enum AddProductStatus { initial, loading, loaded, failure }
 
-// enum AddProductPageStatus { initial, loading, success, failure }
+class AddProductState extends Equatable {
+  final AddProductStatus status;
+  final String name;
+  final String description;
+  final double price;
+  final String imageUrl;
 
+  const AddProductState({
+    this.status = AddProductStatus.initial,
+    this.name = '',
+    this.description = '',
+    this.price = 0.0,
+    this.imageUrl = '',
+  });
 
-// class AddProductState extends Equatable {
-//   final AddProductPageStatus status;
-//   final String name;
-//   final String description;
-//   final String imageUrl;
-//   final double price;
+  AddProductState copyWith({
+    AddProductStatus? status,
+    String? name,
+    String? description,
+    double? price,
+    String? imageUrl,
+  }) {
+    return AddProductState(
+      status: status ?? this.status,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 
-//   const AddProductState({
-//     this.status = AddProductPageStatus.initial,
-//     this.name = '',
-//     this.description = '',
-//     this.imageUrl = "https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg",
-//     this.price = 0.0,
-//   });
-
-//   AddProductState copyWith({
-//     AddProductPageStatus? status,
-//     String? name,
-//     String? description,
-//     String? imageUrl,
-//     double? price,
-//   }) {
-//     return AddProductState(
-//       status: status ?? this.status,
-//       name: name ?? this.name,
-//       description: description ?? this.description,
-//       price: price ?? this.price,
-//       imageUrl: imageUrl ?? this.imageUrl,
-//     );
-//   }
-
-//   @override
-//   List<Object?> get props => [status, name, description, imageUrl, price];
-// }
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}

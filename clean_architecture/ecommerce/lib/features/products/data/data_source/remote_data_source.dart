@@ -15,28 +15,28 @@ class RemoteDataSource extends Api {
 
   @override
   Stream<List<ProductModel>> getAllProducts() async* {
-  try {
-    final response = await dio.get('$apiKey/products');
+    try {
+      final response = await dio.get('$apiKey/products');
 
-    if (response.statusCode == 200) {
-      final List<ProductModel> products = [];
-      final Map<String, dynamic> data = response.data;
+      if (response.statusCode == 200) {
+        final List<ProductModel> products = [];
+        final Map<String, dynamic> data = response.data;
 
-      final product = data['data'];
-      product.forEach((element) {
-        products.add(ProductModel.fromjson(element));
-      });
+        final product = data['data'];
+        product.forEach((element) {
+          products.add(ProductModel.fromjson(element));
+        });
 
-      yield products;
-    } else {
-      print("Failed to fetch products");
+        yield products;
+      } else {
+        print("Failed to fetch products");
+        yield [];
+      }
+    } catch (e) {
+      print("Error occurred: $e");
       yield [];
     }
-  } catch (e) {
-    print("Error occurred: $e");
-    yield []; 
   }
-}
 
   @override
   Future<Either<Failure, ProductModel>> addProduct(ProductModel product) async {
@@ -104,10 +104,12 @@ class RemoteDataSource extends Api {
       ProductModel product) async {
     try {
       final response = await dio.put('$apiKey/products/${product.id}',
-          data: product.toJson());
+          data: product.forApi());
+      print("from api ${response.data}");
       if (response.statusCode == 200) {
         return Right(product);
       } else {
+        print(" failed ${response.statusCode}");
         return Left(Failure(message: "Failed to update product"));
       }
     } catch (e) {

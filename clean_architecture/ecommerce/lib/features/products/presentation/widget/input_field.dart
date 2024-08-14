@@ -1,8 +1,10 @@
 import 'package:ecommerce/core/constants/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class InputField extends StatelessWidget {
+  TextEditingController controller;
   double fieldHeight;
   String text;
   double fieldWidth;
@@ -10,10 +12,11 @@ class InputField extends StatelessWidget {
   Color color;
   IconData? suffix;
   Color? iconColor;
-   final void Function(String)? onChange;
+  final void Function(String)? onChange;
   TextInputType? keyboardType;
   InputField(
       {this.fieldHeight = 0.05,
+      required this.controller,
       this.suffixicon = false,
       this.text = '',
       this.color = AppColors.lightGrey,
@@ -22,7 +25,8 @@ class InputField extends StatelessWidget {
       this.iconColor = AppColors.purple,
       this.onChange,
       this.keyboardType = TextInputType.multiline,
-      super.key});
+      super.key,  
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,7 @@ class InputField extends StatelessWidget {
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(10), color: color),
       child: TextFormField(
+        controller: controller,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';

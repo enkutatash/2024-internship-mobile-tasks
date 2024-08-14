@@ -3,20 +3,19 @@ import 'package:ecommerce/core/network/network.dart';
 import 'package:ecommerce/features/products/data/data_source/local_data_source.dart';
 import 'package:ecommerce/features/products/data/data_source/remote_data_source.dart';
 import 'package:ecommerce/features/products/data/repository/product_repository_imp.dart';
+import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerce/features/products/domain/usecase/add_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/delete_product_usecase.dart';
 import 'package:ecommerce/features/products/domain/usecase/get_all_product_usecase.dart';
-import 'package:ecommerce/features/products/presentation/add_product/bloc/add_product_bloc.dart';
+import 'package:ecommerce/features/products/domain/usecase/update_product_usecase.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
-import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_event.dart';
 import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
-import 'package:ecommerce/features/products/presentation/page/detail_product_page.dart';
 import 'package:ecommerce/features/products/presentation/page/home_page.dart';
 import 'package:ecommerce/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+// kelbi
 
 class ProductObserver extends BlocObserver {
   @override
@@ -32,7 +31,7 @@ class ProductObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    print('${bloc.runtimeType} $change');
+    // print('${bloc.runtimeType} $change');
   }
 
   @override
@@ -64,15 +63,27 @@ class MainScreen extends StatelessWidget {
           create: (context) => HomePageBloc(
             deleteProductUsecase: locator<DeleteProductUsecase>(),
             getAllProductUsecase: locator<GetAllProductUsecase>(),
-            addProductUsecase: locator<AddProductUsecase>(),
+            // addProductUsecase: locator<AddProductUsecase>(),
+            // update: locator<UpdateProductUsecase>(),
           )..add(FetchAllProducts()),
           child: child!,
         );
       },
       routes: {
         '/': (context) => const HomePage(),
-        '/add_product': (context) => const AddProductPage(),
+       '/add_product': (context) =>const AddProductPage(),
       },
+      // onGenerateRoute: (settings) {
+      //   if (settings.name == '/update') {
+      //     final item = settings.arguments as ProductEntity?;
+      //     return MaterialPageRoute(
+      //       builder: (context) {
+      //         return AddProductPage(item: item);
+      //       },
+      //     );
+      //   }
+      //   return null;
+      // },
     );
   }
 }

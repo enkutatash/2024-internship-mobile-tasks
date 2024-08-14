@@ -1,36 +1,43 @@
-// part of 'add_product_bloc.dart';
+part of 'add_product_bloc.dart';
 
-// sealed class AddProductEvent {}
+@immutable
+sealed class AddProductEvent {}
 
+class AddProduct extends AddProductEvent {
+  final String name;
+  final String description;
+  final double price;
+  final String imageUrl;
 
-// class OnImageChanged extends AddProductEvent {
-//   final String imageUrl;
+  AddProduct({
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.imageUrl,
+  });
+}
 
-//   OnImageChanged({required this.imageUrl});
-// }
+class OnImageChanged extends AddProductEvent {
+  final String imageUrl;
 
-// class OnNamedChanged extends AddProductEvent {
-//   final String name;
+  OnImageChanged({required this.imageUrl});
+}
 
-//   OnNamedChanged({required this.name});
-// }
+class OnNamedChanged extends AddProductEvent {
+  final String name;
 
-// class OnDescriptionChanged extends AddProductEvent {
-//   final String description;
+  OnNamedChanged({required this.name});
+}
 
-//   OnDescriptionChanged({required this.description});
-// }
+class OnDescriptionChanged extends AddProductEvent {
+  final String description;
 
-// class OnPriceChanged extends AddProductEvent {
-//   final double price;
+  OnDescriptionChanged({required this.description});
+}
 
-//   OnPriceChanged({required this.price});
-// }
+class OnPriceChanged extends AddProductEvent {
+  final double price;
 
-// class OnSubmit extends AddProductEvent {}
-
-
-
-
-
+  OnPriceChanged({required this.price});
+}
 
