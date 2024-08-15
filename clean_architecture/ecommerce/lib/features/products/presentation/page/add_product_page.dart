@@ -27,6 +27,7 @@ class _AddProductPageState extends State<AddProductPage> {
   TextEditingController size = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   String imagePath = '';
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -72,138 +73,172 @@ class _AddProductPageState extends State<AddProductPage> {
         centerTitle: true,
       ),
       body: Form(
+          key: _formKey,
           child: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  width: double.infinity,
-                  height: height * 0.2,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.lightGrey),
-                  child: Stack(
-                    children: [
-                      if (imagePath != null && imagePath!.isNotEmpty)
-                        imagePath!.startsWith('http')
-                            ? Image.network(
-                                imagePath!,
-                                width: double.infinity,
-                                height: height * 0.2,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                File(imagePath!),
-                                width: double.infinity,
-                                height: height * 0.2,
-                                fit: BoxFit.cover,
-                              )
-                      else
-                        const Center(
-                          child: Text("No image available"),
-                        ),
-                      Positioned(
-                        right: 10,
-                        bottom: 10,
-                        child: IconButton(
-                            onPressed: () => _pickImage(ImageSource.gallery),
-                            icon: Image.asset(
-                              'assets/images/image_icon.png',
-                              width: 35,
-                              height: 35,
-                            )),
-                      ),
-                    ],
-                  )),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              const CustomText(text: 'name'),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              InputField(
-                controller: name,
-              ),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              const CustomText(text: 'Price'),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              InputField(
-                controller: price,
-                suffixicon: true,
-                suffix: Icons.attach_money_sharp,
-              ),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              const CustomText(text: 'Description'),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              InputField(
-                fieldHeight: 0.25,
-                controller: description,
-              ),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              Padding(
-                  padding:
-                      const EdgeInsets.only(left: 15.0, right: 15, top: 10),
-                  child: FiledButton(
-                    // ignore: unnecessary_null_comparison
-                    name: widget.item != null ? 'Update' : 'Add',
-                    width: 1,
-                    ontap: () {
-                      if (widget.item != null) {
-                         
-                          context.read<HomePageBloc>().add(UpdateProductPress(
-                          id: widget.item!.id,
-                          description: description.text,
-                          name: name.text,
-                          price: double.parse(price.text),
-                          imageUrl: imagePath));
-                      
-                      } else {
-                        context.read<HomePageBloc>().add(AddProductPress(
-                          description: description.text,
-                          name: name.text,
-                          price: double.parse(price.text),
-                          imageUrl: imagePath));
-                        
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => _pickImage(ImageSource.gallery),
+                    child: Container(
+                        width: double.infinity,
+                        height: height * 0.2,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColors.lightGrey),
+                        child: Stack(
+                          children: [
+                            if (imagePath != null && imagePath.isNotEmpty)
+                              imagePath.startsWith('http')
+                                  ? Image.network(
+                                      imagePath,
+                                      width: double.infinity,
+                                      height: height * 0.2,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.file(
+                                      File(imagePath!),
+                                      width: double.infinity,
+                                      height: height * 0.2,
+                                      fit: BoxFit.cover,
+                                    )
+                            else
+                              const Center(
+                                child: Text("No image Uploaded"),
+                              ),
+                            Positioned(
+                              right: 10,
+                              bottom: 10,
+                              child: IconButton(
+                                  onPressed: () =>
+                                      _pickImage(ImageSource.gallery),
+                                  icon: Image.asset(
+                                    'assets/images/image_icon.png',
+                                    width: 35,
+                                    height: 35,
+                                  )),
+                            ),
+                          ],
+                        )),
+                  ),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  const CustomText(text: 'name'),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  InputField(
+                    hintText: "Product Name",
+                    validator: (value) =>
+                        value!.isEmpty ? 'Name is required' : null,
+                    controller: name,
+                  ),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  const CustomText(text: 'Price'),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  InputField(
+                    hintText: "Product Price",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Price is required';
                       }
-                     Navigator.pushNamed(context, '/');
+
+                      double? price = double.tryParse(value);
+                      if (price == null) {
+                        return 'Please enter a valid number';
+                      }
+
+                      if (price < 0) {
+                        return 'Price cannot be negative';
+                      }
+
+                      return null;
                     },
-                  )),
-              SizedBox(
-                height: height * 0.012,
-              ),
-              widget.item != null
-                  ? Padding(
+                    controller: price,
+                    suffixicon: true,
+                    suffix: Icons.attach_money_sharp,
+                  ),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  const CustomText(text: 'Description'),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  InputField(
+                    hintText: "Product Description",
+                    validator: (value) =>
+                        value!.isEmpty ? 'Description is required' : null,
+                    fieldHeight: 0.25,
+                    controller: description,
+                  ),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  Padding(
                       padding:
                           const EdgeInsets.only(left: 15.0, right: 15, top: 10),
-                      child: RedOutlinedButton(
-                        name: 'DELETE',
+                      child: FiledButton(
+                        // ignore: unnecessary_null_comparison
+                        name: widget.item != null ? 'Update' : 'Add',
                         width: 1,
                         ontap: () {
-                          context
-                              .read<HomePageBloc>()
-                              .add(DeleteProduct(id: widget.item!.id));
-                          Navigator.pushNamed(context, '/');
+                          if (_formKey.currentState?.validate() ?? false) {
+                            if (widget.item != null) {
+                              context.read<HomePageBloc>().add(
+                                  UpdateProductPress(
+                                      id: widget.item!.id,
+                                      description: description.text,
+                                      name: name.text,
+                                      price: double.parse(price.text),
+                                      imageUrl: imagePath));
+                            } else {
+                              context.read<HomePageBloc>().add(AddProductPress(
+                                  description: description.text,
+                                  name: name.text,
+                                  price: double.parse(price.text),
+                                  imageUrl: imagePath));
+                            }
+                            Navigator.pushNamed(context, '/');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'The data you Entered is not valid!')),
+                            );
+                          }
                         },
-                      ))
-                  : const SizedBox(),
-            ],
-          ),
-        ),
-      )),
+                      )),
+                  SizedBox(
+                    height: height * 0.012,
+                  ),
+                  widget.item != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, right: 15, top: 10),
+                          child: RedOutlinedButton(
+                            name: 'DELETE',
+                            width: 1,
+                            ontap: () {
+                              context
+                                  .read<HomePageBloc>()
+                                  .add(DeleteProduct(id: widget.item!.id));
+                              Navigator.pushNamed(context, '/');
+                            },
+                          ))
+                      : const SizedBox(),
+                ],
+              ),
+            ),
+          )),
     );
   }
 }

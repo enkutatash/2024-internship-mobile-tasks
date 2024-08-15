@@ -7,21 +7,100 @@ class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-
-   return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: ListView.builder(
-        itemCount: 5, // Adjust the count based on your needs
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Container(
-              height: 20,
-              width: 200,
-              color: Colors.white,
+    return Container(
+      child: Column(
+        children: [
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              width: double.infinity,
+              height: height * 0.18,
             ),
-          );
-        },
+          ),
+          SizedBox(
+            height: height * 0.01,
+          ),
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              width: double.infinity,
+              height: height * 0.04,
+            ),
+          ),
+          SizedBox(
+            height: height * 0.01,
+          ),
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              width: double.infinity,
+              height: height * 0.18,
+            ),
+          ),
+          SizedBox(
+            height: height * 0.01,
+          ),
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              width: double.infinity,
+              height: height * 0.04,
+            ),
+          ),
+          SizedBox(
+            height: height * 0.01,
+          ),
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              width: double.infinity,
+              height: height * 0.18,
+            ),
+          ),
+          SizedBox(
+            height: height * 0.01,
+          ),
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              width: double.infinity,
+              height: height * 0.04,
+            ),
+          ),
+          SizedBox(
+            height: height * 0.01,
+          ),
+        ],
       ),
     );
   }

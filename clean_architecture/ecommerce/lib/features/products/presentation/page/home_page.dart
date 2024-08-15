@@ -6,6 +6,8 @@ import 'package:ecommerce/features/products/presentation/widget/product_view.dar
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,6 +20,8 @@ class HomePage extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('MMMM dd,yyyy').format(now);
 
     return Scaffold(
       body: SafeArea(
@@ -27,12 +31,16 @@ class HomePage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
-                    width: width * 0.13,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.gray,
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      width: width * 0.13,
+                      height: height * 0.06,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.gray,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -41,8 +49,8 @@ class HomePage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "July 14, 2024",
+                      Text(
+                        "${formattedDate}",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 12,
@@ -50,9 +58,10 @@ class HomePage extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Text(
+                          Text(
                             "Hello",
                             style: TextStyle(
+                                fontFamily: "Poppins",
                                 fontWeight: FontWeight.w400,
                                 fontSize: 15,
                                 color: AppColors.textGrey),
@@ -63,6 +72,7 @@ class HomePage extends StatelessWidget {
                           const Text(
                             "Yohannes",
                             style: TextStyle(
+                              fontFamily: "Poppins",
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
                             ),
@@ -92,6 +102,7 @@ class HomePage extends StatelessWidget {
                   const Text(
                     "Available Products",
                     style: TextStyle(
+                      fontFamily: "Poppins",
                       fontWeight: FontWeight.w600,
                       fontSize: 25,
                     ),
@@ -118,7 +129,7 @@ class HomePage extends StatelessWidget {
               BlocBuilder<HomePageBloc, HomePageState>(
                 builder: (context, state) {
                   if (state.status == HomePageStatus.loading) {
-                    return const CupertinoActivityIndicator();
+                    return LoadingPage();
                   } else if (state.status == HomePageStatus.failure) {
                     return Center(
                       child: Column(
@@ -145,6 +156,8 @@ class HomePage extends StatelessWidget {
                       onRefresh: () async {
                         context.read<HomePageBloc>().add(FetchAllProducts());
                       },
+                      color: Color(0x00000000),
+                      backgroundColor: Color(0x00000000),
                       child: ListView(
                         children: [
                           for (var product in state.products!)

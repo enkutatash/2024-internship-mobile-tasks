@@ -11,9 +11,11 @@ class InputField extends StatelessWidget {
   bool suffixicon;
   Color color;
   IconData? suffix;
+  String? hintText;
   Color? iconColor;
   final void Function(String)? onChange;
   TextInputType? keyboardType;
+  final String? Function(String? value)? validator;
   InputField(
       {this.fieldHeight = 0.05,
       required this.controller,
@@ -25,8 +27,9 @@ class InputField extends StatelessWidget {
       this.iconColor = AppColors.purple,
       this.onChange,
       this.keyboardType = TextInputType.multiline,
-      super.key,  
-      });
+      super.key,
+      required this.validator,
+      this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +45,11 @@ class InputField extends StatelessWidget {
           BoxDecoration(borderRadius: BorderRadius.circular(10), color: color),
       child: TextFormField(
         controller: controller,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
-          }
-          return null;
-        },
+        validator: validator,
         onChanged: onChange,
         decoration: InputDecoration(
+          hintStyle: TextStyle(fontSize: 15, color: AppColors.gray),
+          hintText: hintText,
           border: InputBorder.none,
           suffixIcon: suffixicon
               ? Icon(
