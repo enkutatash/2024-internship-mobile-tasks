@@ -2,6 +2,7 @@ import 'package:ecommerce/core/constants/colors.dart';
 import 'package:ecommerce/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerce/features/products/presentation/page/detail_product_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductView extends StatelessWidget {
   final ProductEntity product;
@@ -58,7 +59,7 @@ class ProductView extends StatelessWidget {
                 children: [
                   Text(
                     product.name,
-                    style: const TextStyle(
+                    style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w500,
                       fontSize: 20,
                     ),
@@ -74,7 +75,7 @@ class ProductView extends StatelessWidget {
                 ],
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 8.0, right: 8),
               child: Row(
                 children: [
@@ -85,7 +86,7 @@ class ProductView extends StatelessWidget {
                   ),
                   Text(
                     "4.0",
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w400,
                       fontSize: 12,

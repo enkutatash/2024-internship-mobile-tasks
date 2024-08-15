@@ -6,6 +6,7 @@ import 'package:ecommerce/features/products/presentation/widget/product_view.dar
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
 
@@ -24,6 +25,7 @@ class HomePage extends StatelessWidget {
     String formattedDate = DateFormat('MMMM dd,yyyy').format(now);
 
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -60,19 +62,18 @@ class HomePage extends StatelessWidget {
                         children: [
                           Text(
                             "Hello",
-                            style: TextStyle(
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15,
-                                color: AppColors.textGrey),
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: AppColors.textGrey,
+                            ),
                           ),
                           SizedBox(
                             width: width * 0.01,
                           ),
-                          const Text(
+                          Text(
                             "Yohannes",
-                            style: TextStyle(
-                              fontFamily: "Poppins",
+                            style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
                             ),
@@ -82,16 +83,34 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  Container(
-                    width: width * 0.11,
-                    height: height * 0.055,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.white,
-                      border: Border.all(width: 0.03),
+                  Stack(children: [
+                    Container(
+                      width: width * 0.12,
+                      height: height * 0.055,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.white,
+                        border: Border.all(width: 0.05),
+                      ),
+                      // child: Image.asset("assets/images/bell_icon.png"),
+                      child: Icon(
+                        CupertinoIcons.bell,
+                        color: AppColors.gray,
+                      ),
                     ),
-                    child: Image.asset("assets/images/bell_icon.png"),
-                  ),
+                    Positioned(
+                      top: 14,
+                      right: 14,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.purple,
+                        ),
+                        width: 8,
+                        height: 8,
+                      ),
+                    ),
+                  ]),
                 ],
               ),
               SizedBox(
@@ -99,17 +118,16 @@ class HomePage extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     "Available Products",
-                    style: TextStyle(
-                      fontFamily: "Poppins",
+                    style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w600,
                       fontSize: 25,
                     ),
                   ),
                   const Spacer(),
                   Container(
-                    width: width * 0.11,
+                    width: width * 0.12,
                     height: height * 0.055,
                     decoration: BoxDecoration(
                       border: Border.all(width: 0.03),
@@ -126,49 +144,48 @@ class HomePage extends StatelessWidget {
               SizedBox(
                 height: height * 0.03,
               ),
-              BlocBuilder<HomePageBloc, HomePageState>(
-                builder: (context, state) {
-                  if (state.status == HomePageStatus.loading) {
-                    return LoadingPage();
-                  } else if (state.status == HomePageStatus.failure) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Failed to load data"),
-                          ElevatedButton(
-                            onPressed: () {
-                              context
-                                  .read<HomePageBloc>()
-                                  .add(FetchAllProducts());
-                            },
-                            child: const Text('Retry'),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<HomePageBloc>().add(FetchAllProducts());
+                  },
+                  child: BlocBuilder<HomePageBloc, HomePageState>(
+                    builder: (context, state) {
+                      if (state.status == HomePageStatus.loading) {
+                        return LoadingPage();
+                      } else if (state.status == HomePageStatus.failure) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Failed to load data"),
+                              ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<HomePageBloc>()
+                                      .add(FetchAllProducts());
+                                },
+                                child: const Text('Retry'),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  } else if (state.products!.isEmpty) {
-                    return const Center(child: Text("No Product is available"));
-                  }
+                        );
+                      } else if (state.products!.isEmpty) {
+                        return const Center(
+                            child: Text("No Product is available"));
+                      }
 
-                  return Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        context.read<HomePageBloc>().add(FetchAllProducts());
-                      },
-                      color: Color(0x00000000),
-                      backgroundColor: Color(0x00000000),
-                      child: ListView(
+                      return ListView(
                         children: [
                           for (var product in state.products!)
                             ProductView(
                               product: product,
                             ),
                         ],
-                      ),
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),
