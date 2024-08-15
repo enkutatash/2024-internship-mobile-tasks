@@ -2,6 +2,7 @@ import 'package:ecommerce/core/constants/colors.dart';
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
 import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
 import 'package:ecommerce/features/products/presentation/page/loading_page.dart';
+import 'package:ecommerce/features/products/presentation/search_page/bloc/search_bloc.dart';
 import 'package:ecommerce/features/products/presentation/widget/product_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,9 @@ class HomePage extends StatelessWidget {
                     ),
                     child: IconButton(
                       icon: const Icon(CupertinoIcons.search),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/search');
+                      },
                     ),
                   ),
                 ],
@@ -148,6 +151,7 @@ class HomePage extends StatelessWidget {
                 child: RefreshIndicator(
                   onRefresh: () async {
                     context.read<HomePageBloc>().add(FetchAllProducts());
+                    
                   },
                   child: BlocBuilder<HomePageBloc, HomePageState>(
                     builder: (context, state) {
@@ -160,11 +164,7 @@ class HomePage extends StatelessWidget {
                             children: [
                               const Text("Failed to load data"),
                               ElevatedButton(
-                                onPressed: () {
-                                  context
-                                      .read<HomePageBloc>()
-                                      .add(FetchAllProducts());
-                                },
+                                onPressed: () {},
                                 child: const Text('Retry'),
                               ),
                             ],
@@ -175,6 +175,7 @@ class HomePage extends StatelessWidget {
                             child: Text("No Product is available"));
                       }
 
+                     
                       return ListView(
                         children: [
                           for (var product in state.products!)

@@ -12,6 +12,8 @@ import 'package:ecommerce/features/products/presentation/add_product/bloc/add_pr
 import 'package:ecommerce/features/products/presentation/home_bloc/bloc/home_page_bloc.dart';
 import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
 import 'package:ecommerce/features/products/presentation/page/home_page.dart';
+import 'package:ecommerce/features/products/presentation/page/search_page.dart';
+import 'package:ecommerce/features/products/presentation/search_page/bloc/search_bloc.dart';
 import 'package:ecommerce/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +34,7 @@ class ProductObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    // print('${bloc.runtimeType} $change');
+    print('${bloc.runtimeType} $change');
   }
 
   @override
@@ -56,48 +58,40 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      builder: (context, child) {
-        return BlocProvider(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
           create: (context) => HomePageBloc(
             updateProductUsecase: locator<UpdateProductUsecase>(),
             deleteProductUsecase: locator<DeleteProductUsecase>(),
             getAllProductUsecase: locator<GetAllProductUsecase>(),
             addProductUsecase: locator<AddProductUsecase>(),
-            // update: locator<UpdateProductUsecase>(),
           )..add(FetchAllProducts()),
-          child: child!,
-        );
-      },
-      routes: {
-        '/': (context) => const HomePage(),
-       '/add_product': (context) =>const AddProductPage(),
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == '/update') {
-          final item = settings.arguments as ProductEntity?;
-          return MaterialPageRoute(
-            builder: (context) {
-              return AddProductPage(item: item);
-            },
-          );
-        }
-        return null;
-      },
-
-      // onGenerateRoute: (settings) {
-      //   if (settings.name == '/update') {
-      //     final item = settings.arguments as ProductEntity?;
-      //     return MaterialPageRoute(
-      //       builder: (context) {
-      //         return AddProductPage(item: item);
-      //       },
-      //     );
-      //   }
-      //   return null;
-      // },
+        ),
+        BlocProvider(
+          create: (context) => SearchBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const HomePage(),
+          '/add_product': (context) => const AddProductPage(),
+          '/search': (context) => const SearchPage(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == '/update') {
+            final item = settings.arguments as ProductEntity?;
+            return MaterialPageRoute(
+              builder: (context) {
+                return AddProductPage(item: item);
+              },
+            );
+          }
+          return null;
+        },
+      ),
     );
   }
 }

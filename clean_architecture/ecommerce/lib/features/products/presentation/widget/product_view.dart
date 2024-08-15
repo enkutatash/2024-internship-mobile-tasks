@@ -59,6 +59,8 @@ class ProductView extends StatelessWidget {
                 children: [
                   Text(
                     product.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w500,
                       fontSize: 20,

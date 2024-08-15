@@ -65,6 +65,7 @@ class ProductDetail extends StatelessWidget {
                   Text(
                     item.name,
                     style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.w500,
                       fontSize: 24,
                     ),
@@ -99,7 +100,7 @@ class ProductDetail extends StatelessWidget {
                     ontap: () {
                       context
                           .read<HomePageBloc>()
-                          .add(DeleteProduct(id:item.id));
+                          .add(DeleteProduct(id: item.id));
                       Navigator.pushNamed(context, '/');
                     },
                   ),
@@ -112,7 +113,6 @@ class ProductDetail extends StatelessWidget {
                         '/update',
                         arguments: item,
                       );
-                      
                     },
                   )
                 ],
