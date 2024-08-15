@@ -26,8 +26,8 @@ class RemoteDataSource extends Api {
         product.forEach((element) {
           products.add(ProductModel.fromjson(element));
         });
-
-        yield products;
+        yield products.reversed.toList();
+        // yield products;
       } else {
         print("Failed to fetch products");
         yield [];
