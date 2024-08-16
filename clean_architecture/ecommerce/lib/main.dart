@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:ecommerce/core/network/network.dart';
+import 'package:ecommerce/features/auth/domain/usecase/register_usecase.dart';
+import 'package:ecommerce/features/auth/presentation/registration_page/login_page.dart';
+import 'package:ecommerce/features/auth/presentation/registration_page/registration_page.dart';
 import 'package:ecommerce/features/products/data/data_source/local_data_source.dart';
 import 'package:ecommerce/features/products/data/data_source/remote_data_source.dart';
 import 'package:ecommerce/features/products/data/repository/product_repository_imp.dart';
@@ -17,6 +20,8 @@ import 'package:ecommerce/features/products/presentation/search_page/bloc/search
 import 'package:ecommerce/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'features/auth/presentation/register/bloc/register_bloc.dart';
 
 // kelbi
 
@@ -71,14 +76,19 @@ class MainScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => SearchBloc(),
         ),
+        BlocProvider(
+            create: (context) =>
+                RegisterBloc(registerUsecase: locator<RegisterUsecase>()))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+        initialRoute: '/register',
         routes: {
           '/': (context) => const HomePage(),
           '/add_product': (context) => const AddProductPage(),
           '/search': (context) => const SearchPage(),
+          '/register': (context) => const RegistrationPage(),
+          '/login': (context) => const LoginPage()
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/update') {

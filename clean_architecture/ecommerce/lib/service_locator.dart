@@ -2,6 +2,13 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:ecommerce/core/network/network.dart';
+import 'package:ecommerce/features/auth/data_layer/data_source/local_abstract.dart';
+import 'package:ecommerce/features/auth/data_layer/data_source/local_data_source_user.dart';
+import 'package:ecommerce/features/auth/data_layer/data_source/remote_abstract.dart';
+import 'package:ecommerce/features/auth/data_layer/data_source/remote_data_source_user.dart';
+import 'package:ecommerce/features/auth/data_layer/repository_impl/user_repository_imp.dart';
+import 'package:ecommerce/features/auth/domain/repository/auth_repository.dart';
+import 'package:ecommerce/features/auth/domain/usecase/register_usecase.dart';
 import 'package:ecommerce/features/products/data/data_source/local_data_source.dart';
 import 'package:ecommerce/features/products/data/data_source/local_source.dart';
 import 'package:ecommerce/features/products/data/data_source/remote_api.dart';
@@ -52,10 +59,24 @@ Future<void> setUp() async {
   locator.registerLazySingleton<UpdateProductUsecase>(() =>
       UpdateProductUsecase(productRepository: locator<ProductRepository>()));
 
-  locator.registerLazySingleton<HomePageBloc>(()=>HomePageBloc(
-    updateProductUsecase: locator<UpdateProductUsecase>(),
-    addProductUsecase: locator<AddProductUsecase>(),
-    deleteProductUsecase: locator<DeleteProductUsecase>(),
-    getAllProductUsecase: locator<GetAllProductUsecase>(),
-  ));
+  locator.registerLazySingleton<HomePageBloc>(() => HomePageBloc(
+        updateProductUsecase: locator<UpdateProductUsecase>(),
+        addProductUsecase: locator<AddProductUsecase>(),
+        deleteProductUsecase: locator<DeleteProductUsecase>(),
+        getAllProductUsecase: locator<GetAllProductUsecase>(),
+      ));
+
+  locator.registerLazySingleton<LocalAbstract>(() =>
+      LocalDataSourceUser(sharedPreferences: locator<SharedPreferences>()));
+
+  locator.registerLazySingleton<RemoteAbstract>(
+      () => RemoteDataSourceUser(dio: locator<Dio>()));
+
+  locator.registerLazySingleton<AuthRepository>(() => UserRepositoryImp(
+      networkInfo: locator<NetworkInfo>(),
+      localAbstract: locator<LocalAbstract>(),
+      remoteAbstract: locator<RemoteAbstract>()));
+
+  locator.registerLazySingleton<RegisterUsecase>(
+      () => RegisterUsecase(repository: locator<AuthRepository>()));
 }
