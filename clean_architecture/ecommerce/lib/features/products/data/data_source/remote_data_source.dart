@@ -57,13 +57,13 @@ class RemoteDataSource extends Api {
 
       final response = await dio.post('$apiKey/products', data: formData);
       if (response.statusCode == 201) {
-        print("added");
+        
         return Right(product);
       } else {
         return Left(Failure(message: "Failed to add  product"));
       }
     } catch (e) {
-      print("error");
+     
       return Left(Failure(message: "$e Failed to Add  Data"));
     }
   }

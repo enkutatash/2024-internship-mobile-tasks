@@ -18,7 +18,6 @@ class ProductRepositoryImp implements ProductRepository {
   Stream<List<ProductModel>> getAllProducts() async* {
     if (await networkInfo.isConnected) {
       try {
-        // Fetching products from the API
         var products = await api.getAllProducts();
 
         // Assuming 'products' is of type List<ProductModel>
