@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ecommerce/core/network/network.dart';
+import 'package:ecommerce/features/auth/domain/usecase/login_usecase.dart';
 import 'package:ecommerce/features/auth/domain/usecase/register_usecase.dart';
 import 'package:ecommerce/features/auth/presentation/registration_page/login_page.dart';
 import 'package:ecommerce/features/auth/presentation/registration_page/registration_page.dart';
@@ -78,7 +79,7 @@ class MainScreen extends StatelessWidget {
         ),
         BlocProvider(
             create: (context) =>
-                RegisterBloc(registerUsecase: locator<RegisterUsecase>()))
+                RegisterBloc(registerUsecase: locator<RegisterUsecase>(),loginUsecase: locator<LoginUsecase>()))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

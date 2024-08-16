@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:ecommerce/core/form_validation/form_validation.dart';
 import 'package:ecommerce/features/auth/domain/entity/user_entity.dart';
+import 'package:ecommerce/features/auth/domain/usecase/login_usecase.dart';
 import 'package:ecommerce/features/auth/domain/usecase/register_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -14,11 +15,14 @@ part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterUsecase registerUsecase;
+  LoginUsecase loginUsecase;
 
   RegisterBloc({
+    required this.loginUsecase,
     required this.registerUsecase,
   }) : super(RegisterState()) {
     on<RegisterSubmitted>(_register);
+    on<LoginEvent>(_login);
     on<NameChanged>(_nameChanges);
     on<EmailChanged>(_emailChanges);
     on<PasswordChanged>(_passwordChanges);
@@ -28,22 +32,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   FutureOr<void> _register(
       RegisterSubmitted event, Emitter<RegisterState> emit) async {
     emit(state.copyWith(status: RegisterStatus.submitting));
-    print("RegisterSubmitted");
-    print("name ${state.name}");
-    print("email ${state.email}");
-    print("pass ${state.password}");
-    print("confirm ${state.confirmPassword}");
+
     // validation start
     final name = Name.dirty(state.name);
     final email = Email.dirty(state.email);
     final password = Password.dirty(state.password);
     final confirmPassword =
         Confirm.dirty(state.password, state.confirmPassword);
-    print("validation");
-    print("name ${state.name} ${name.isValid}");
-    print("email ${state.email} ${email.isValid}");
-    print("pass ${state.password} ${password.isValid}");
-    print("confirm ${state.confirmPassword} ${confirmPassword.isValid}");
+
     if (name.isValid &&
         email.isValid &&
         password.isValid &&
@@ -65,20 +61,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       );
       final result = await registerUsecase.call(user);
       result.fold((failure) {
-        print("api");
-        print(failure);
-        emit(state.copyWith(status: RegisterStatus.error));
+        emit(state.copyWith(status: RegisterStatus.regfail));
       }, (user) {
         emit(state.copyWith(status: RegisterStatus.success));
       });
     } else {
-      print("invalid");
       emit(state.copyWith(
         name: name.value,
         email: email.value,
         password: password.value,
         confirmPassword: confirmPassword.value,
-        status: RegisterStatus.error,
+        formzStatus: FormzStatus.invalid,
       ));
     }
   }
@@ -119,5 +112,32 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         isChecked: event.isChecked,
         formzStatus: FormzStatus.pure,
         status: RegisterStatus.initial));
+  }
+
+  FutureOr<void> _login(LoginEvent event, Emitter<RegisterState> emit) async {
+    emit(state.copyWith(status: RegisterStatus.submitting));
+    final password = Name.dirty(state.password);
+    final email = Email.dirty(state.email);
+
+    if (password.isValid && email.isValid) {
+      emit(state.copyWith(
+        password: password.value,
+        email: email.value,
+        formzStatus: FormzStatus.valid,
+      ));
+
+      final result = await loginUsecase.call(email.value, password.value);
+      result.fold((failure) {
+        emit(state.copyWith(status: RegisterStatus.loginfail));
+      }, (user) {
+        emit(state.copyWith(status: RegisterStatus.success));
+      });
+    } else {
+      emit(state.copyWith(
+        password: password.value,
+        email: email.value,
+        formzStatus: FormzStatus.invalid,
+      ));
+    }
   }
 }

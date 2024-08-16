@@ -120,10 +120,17 @@ class RegistrationPage extends StatelessWidget {
                 listener: (context, state) {
                   if (state.status == RegisterStatus.success) {
                     Navigator.pushNamed(context, '/');
-                  } else if (state.status == RegisterStatus.error) {
+                  } else if (state.status == RegisterStatus.regfail) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Registration failed'),
+                        backgroundColor: AppColors.red,
+                      ),
+                    );
+                  }else if(state.formzStatus == FormzStatus.invalid){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please fill all the fields'),
                         backgroundColor: AppColors.red,
                       ),
                     );

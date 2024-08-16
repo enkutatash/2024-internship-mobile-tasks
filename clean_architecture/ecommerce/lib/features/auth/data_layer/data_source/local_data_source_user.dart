@@ -11,8 +11,8 @@ class LocalDataSourceUser extends LocalAbstract {
   SharedPreferences sharedPreferences;
   LocalDataSourceUser({required this.sharedPreferences});
 
- @override
-  Future<Either<Failure, UserModelNoPass>> getUser() async {
+  @override
+  Future<Either<Failure, UserModelNoPass>> getUser(String email) async {
     try {
       var userData = sharedPreferences.getString('access_token');
 
@@ -20,8 +20,11 @@ class LocalDataSourceUser extends LocalAbstract {
         Map<String, dynamic> userMap = jsonDecode(userData);
 
         var user = UserModelNoPass.fromJson(userMap);
+        if(user.email == email){
 
         return Right(user);
+        }
+        return Left(Failure(message: "User not found"));
       } else {
         return Left(Failure(message: "Access token not found"));
       }
@@ -30,14 +33,12 @@ class LocalDataSourceUser extends LocalAbstract {
     }
   }
 
- @override
+  @override
   Future<Either<Failure, void>> saveUser(UserModelNoPass user) async {
     try {
-
       String userJson = jsonEncode(user.toJson());
 
       await sharedPreferences.setString('access_token', userJson);
-      print("User saved");
       return Right(null);
     } catch (e) {
       return Left(Failure(message: "Failed to save user: ${e.toString()}"));

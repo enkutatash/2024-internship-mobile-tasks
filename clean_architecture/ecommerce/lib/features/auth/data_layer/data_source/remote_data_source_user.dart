@@ -50,8 +50,7 @@ class RemoteDataSourceUser extends RemoteAbstract {
       if (response.statusCode == 201) {
         final responseData = response.data;
         final userToken = responseData['data']['access_token'];
-        print("Token");
-        print(userToken);
+      
         return Right(userToken);
       } else {
         return Left(Failure(message: 'Failed to get token'));
@@ -72,7 +71,6 @@ class RemoteDataSourceUser extends RemoteAbstract {
       );
       final response = await dio.get('$authKey/users/me', options: options);
       if (response.statusCode == 200) {
-        print("user loged in");
         final responseData = response.data;
         final user = UserModelNoPass.fromJson(responseData['data']);
         return Right(user);
@@ -80,7 +78,6 @@ class RemoteDataSourceUser extends RemoteAbstract {
         return Left(Failure(message: 'Failed to get user'));
       }
     } catch (e) {
-      print("Error: get usr $e");
       return Left(Failure(message: e.toString()));
     }
   }

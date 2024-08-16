@@ -55,3 +55,11 @@ class CheckBoxEvent extends RegisterEvent {
   @override
   List<Object> get props => [isChecked];
 }
+
+class LoginEvent extends RegisterEvent {
+ 
+
+
+  @override
+  List<Object> get props => [];
+}

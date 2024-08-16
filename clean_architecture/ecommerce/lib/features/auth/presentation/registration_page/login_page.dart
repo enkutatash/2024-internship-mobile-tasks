@@ -1,4 +1,5 @@
 import 'package:ecommerce/core/constants/colors.dart';
+import 'package:ecommerce/features/auth/presentation/register/bloc/register_bloc.dart';
 import 'package:ecommerce/features/auth/presentation/widget/button.dart';
 import 'package:ecommerce/features/auth/presentation/widget/checkbox.dart';
 import 'package:ecommerce/features/auth/presentation/widget/label_reg.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatelessWidget {
@@ -52,6 +54,7 @@ class LoginPage extends StatelessWidget {
                 height: height * 0.01,
               ),
               TextFieldReg(
+                onChange: (email)=>context.read<RegisterBloc>().add(EmailChanged(email:email)),
                 hintText: "ex: jon.smith@email.com",
               ),
               SizedBox(
@@ -62,15 +65,40 @@ class LoginPage extends StatelessWidget {
                 height: height * 0.01,
               ),
               PasswordField(
+                onChange: (password)=>context.read<RegisterBloc>().add(PasswordChanged(password:password)),
                 hintText: "************",
               ),
               SizedBox(
                 height: height * 0.04,
               ),
-              ButtonReg(
-                name: "SIGN IN",
-                width: width * 0.8,
-                height: 0.06,
+             BlocListener<RegisterBloc, RegisterState>(
+                listener: (context, state) {
+                  if (state.status == RegisterStatus.success) {
+                    Navigator.pushNamed(context, '/');
+                  } else if (state.status == RegisterStatus.loginfail) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('LOG IN failed'),
+                        backgroundColor: AppColors.red,
+                      ),
+                    );
+                  }else if(state.formzStatus == FormzStatus.invalid){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please fill all the fields'),
+                        backgroundColor: AppColors.red,
+                      ),
+                    );
+                  }
+                },
+                child: ButtonReg(
+                  name: "Log IN",
+                  width: width * 0.8,
+                  height: 0.06,
+                  ontap: () {
+                    context.read<RegisterBloc>().add(LoginEvent());
+                  },
+                ),
               ),
               SizedBox(
                 height: height * 0.3,

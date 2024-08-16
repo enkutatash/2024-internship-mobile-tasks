@@ -8,6 +8,7 @@ import 'package:ecommerce/features/auth/data_layer/data_source/remote_abstract.d
 import 'package:ecommerce/features/auth/data_layer/data_source/remote_data_source_user.dart';
 import 'package:ecommerce/features/auth/data_layer/repository_impl/user_repository_imp.dart';
 import 'package:ecommerce/features/auth/domain/repository/auth_repository.dart';
+import 'package:ecommerce/features/auth/domain/usecase/login_usecase.dart';
 import 'package:ecommerce/features/auth/domain/usecase/register_usecase.dart';
 import 'package:ecommerce/features/products/data/data_source/local_data_source.dart';
 import 'package:ecommerce/features/products/data/data_source/local_source.dart';
@@ -79,4 +80,9 @@ Future<void> setUp() async {
 
   locator.registerLazySingleton<RegisterUsecase>(
       () => RegisterUsecase(repository: locator<AuthRepository>()));
+
+      locator.registerLazySingleton<LoginUsecase>(
+      () => LoginUsecase(repository: locator<AuthRepository>()));
+
+
 }

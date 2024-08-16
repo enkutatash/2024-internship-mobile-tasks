@@ -22,10 +22,12 @@ class UserRepositoryImp implements AuthRepository {
   Future<Either<Failure, UserModelNoPass>> login(
       String email, String password) async {
     try {
-      var user = await localAbstract.getUser();
+      var user = await localAbstract.getUser(email);
       if (user.isRight()) {
+
         return Right(user.getOrElse(() => throw Exception('User not found')));
       } else {
+
         if (await networkInfo.isConnected) {
           var tokenResult = await remoteAbstract.getToken(email, password);
 
@@ -37,6 +39,7 @@ class UserRepositoryImp implements AuthRepository {
             return await userResult.fold((failure) {
               return Left(Failure(message: "User has not registered"));
             }, (userData) async {
+
               await localAbstract.saveUser(userData);
               return Right(userData);
             });
@@ -46,6 +49,7 @@ class UserRepositoryImp implements AuthRepository {
         }
       }
     } catch (e) {
+
       return Left(Failure(message: e.toString()));
     }
   }
@@ -76,7 +80,7 @@ Future<Either<Failure, UserModel>> register(UserEntity user) async {
       return Left(Failure(message: "No internet connection"));
     }
   } catch (e) {
-    print("Error: reg in repo $e");
+
     return Left(Failure(message: e.toString()));
   }
 }
