@@ -3,6 +3,7 @@ import 'package:ecommerce/features/auth/presentation/widget/button.dart';
 import 'package:ecommerce/features/auth/presentation/widget/checkbox.dart';
 import 'package:ecommerce/features/auth/presentation/widget/label_reg.dart';
 import 'package:ecommerce/features/auth/presentation/widget/logo.dart';
+import 'package:ecommerce/features/auth/presentation/widget/password_field.dart';
 import 'package:ecommerce/features/auth/presentation/widget/text_field_reg.dart';
 import 'package:ecommerce/features/products/presentation/widget/button_fields.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,7 +61,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(
                 height: height * 0.01,
               ),
-              TextFieldReg(
+              PasswordField(
                 hintText: "************",
               ),
               SizedBox(

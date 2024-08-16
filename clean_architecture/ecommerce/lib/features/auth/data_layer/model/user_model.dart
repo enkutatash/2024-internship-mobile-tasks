@@ -27,7 +27,7 @@ factory UserModel.fromEntity(UserEntity entity) {
     return UserModel(
       name: entity.name,
       email: entity.email,
-      password: entity.password,
+      password: entity.password!,
     );
   }
 

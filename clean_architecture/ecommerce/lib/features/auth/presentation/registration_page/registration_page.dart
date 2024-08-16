@@ -1,14 +1,18 @@
 import 'package:ecommerce/core/constants/colors.dart';
+import 'package:ecommerce/features/auth/presentation/register/bloc/register_bloc.dart';
 import 'package:ecommerce/features/auth/presentation/widget/button.dart';
 import 'package:ecommerce/features/auth/presentation/widget/checkbox.dart';
 import 'package:ecommerce/features/auth/presentation/widget/label_reg.dart';
 import 'package:ecommerce/features/auth/presentation/widget/logo.dart';
+import 'package:ecommerce/features/auth/presentation/widget/password_field.dart';
 import 'package:ecommerce/features/auth/presentation/widget/text_field_reg.dart';
+import 'package:ecommerce/features/products/presentation/page/add_product_page.dart';
 import 'package:ecommerce/features/products/presentation/widget/button_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegistrationPage extends StatelessWidget {
@@ -58,6 +62,8 @@ class RegistrationPage extends StatelessWidget {
                 height: height * 0.01,
               ),
               TextFieldReg(
+                onChange: (name) =>
+                    context.read<RegisterBloc>().add(NameChanged(name: name)),
                 hintText: "ex:jon smith",
               ),
               SizedBox(
@@ -68,6 +74,8 @@ class RegistrationPage extends StatelessWidget {
                 height: height * 0.01,
               ),
               TextFieldReg(
+                onChange: (email) =>
+                    context.read<RegisterBloc>().add(EmailChanged(email: email)),
                 hintText: "ex: jon.smith@email.com",
               ),
               SizedBox(
@@ -77,7 +85,9 @@ class RegistrationPage extends StatelessWidget {
               SizedBox(
                 height: height * 0.01,
               ),
-              TextFieldReg(
+              PasswordField(
+                onChange: (pass) =>
+                    context.read<RegisterBloc>().add(PasswordChanged(password: pass)),
                 hintText: "************",
               ),
               SizedBox(
@@ -87,23 +97,46 @@ class RegistrationPage extends StatelessWidget {
               SizedBox(
                 height: height * 0.01,
               ),
-              TextFieldReg(
+              PasswordField(
+                onChange: (confirmPassword) =>
+                    context.read<RegisterBloc>().add(ConfirmPasswordChanged(confirmPassword: confirmPassword)),
                 hintText: "************",
               ),
               SizedBox(
                 height: height * 0.01,
               ),
               CustomCheckBox(
-                value: false,
-                onChanged: (val) {},
+                value: context.watch<RegisterBloc>().state.isChecked,
+                onChanged: (val) {
+                  context
+                      .read<RegisterBloc>()
+                      .add(CheckBoxEvent(isChecked: val!));
+                },
               ),
               SizedBox(
                 height: height * 0.01,
               ),
-              ButtonReg(
-                name: "SIGN UP",
-                width: width * 0.8,
-                height: 0.06,
+              BlocListener<RegisterBloc, RegisterState>(
+                listener: (context, state) {
+                  if (state.status == RegisterStatus.success) {
+                    Navigator.pushNamed(context, '/');
+                  } else if (state.status == RegisterStatus.error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Registration failed'),
+                        backgroundColor: AppColors.red,
+                      ),
+                    );
+                  }
+                },
+                child: ButtonReg(
+                  name: "SIGN UP",
+                  width: width * 0.8,
+                  height: 0.06,
+                  ontap: () {
+                    context.read<RegisterBloc>().add(RegisterSubmitted());
+                  },
+                ),
               ),
               SizedBox(
                 height: height * 0.15,

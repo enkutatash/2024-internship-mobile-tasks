@@ -46,3 +46,12 @@ class RegisterSubmitted extends RegisterEvent {
   @override
   List<Object> get props => [];
 }
+
+class CheckBoxEvent extends RegisterEvent {
+  final bool isChecked;
+
+  CheckBoxEvent({required this.isChecked});
+
+  @override
+  List<Object> get props => [isChecked];
+}

@@ -51,7 +51,7 @@ class RemoteDataSource extends Api {
         'image': MultipartFile.fromBytes(
           imageBytes,
           filename: 'images.png',
-          contentType: MediaType('image', 'png'),
+          contentType: MediaType('image', 'png',),
         ),
       });
 

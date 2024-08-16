@@ -4,6 +4,7 @@ import 'package:ecommerce/core/network/network.dart';
 import 'package:ecommerce/features/auth/data_layer/data_source/local_abstract.dart';
 import 'package:ecommerce/features/auth/data_layer/data_source/remote_abstract.dart';
 import 'package:ecommerce/features/auth/data_layer/model/user_model.dart';
+import 'package:ecommerce/features/auth/data_layer/model/user_model_no_pass.dart';
 import 'package:ecommerce/features/auth/domain/entity/user_entity.dart';
 import 'package:ecommerce/features/auth/domain/repository/auth_repository.dart';
 
@@ -18,7 +19,7 @@ class UserRepositoryImp implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, UserModel>> login(
+  Future<Either<Failure, UserModelNoPass>> login(
       String email, String password) async {
     try {
       var user = await localAbstract.getUser();
@@ -55,7 +56,7 @@ Future<Either<Failure, UserModel>> register(UserEntity user) async {
       await remoteAbstract.register(UserModel.fromEntity(user));
       
 
-      var tokenResult = await remoteAbstract.getToken(user.email, user.password);
+      var tokenResult = await remoteAbstract.getToken(user.email, user.password!);
       return await tokenResult.fold((failure) async {
 
         return Left(Failure(message: "User has not registered"));
@@ -68,14 +69,14 @@ Future<Either<Failure, UserModel>> register(UserEntity user) async {
         }, (userData) async {
 
           await localAbstract.saveUser(userData);
-          return Right(userData);
+          return Right(UserModel.fromEntity(user));
         });
       });
     } else {
       return Left(Failure(message: "No internet connection"));
     }
   } catch (e) {
-
+    print("Error: reg in repo $e");
     return Left(Failure(message: e.toString()));
   }
 }

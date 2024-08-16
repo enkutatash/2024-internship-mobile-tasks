@@ -76,11 +76,7 @@ class SearchPage extends StatelessWidget {
               Expanded(
                 child: BlocBuilder<SearchBloc, SearchState>(
                   builder: (context, state) {
-                    print("builder");
-                    print(state.maxPrice);
-                    for(var product in state.filteredProducts){
-                      print("${product.name} pro ${product.price}");
-                    }
+                    
                     if (state.status == HomePageStatus.loading) {
                       return LoadingPage();
                     } else if (state.status == HomePageStatus.failure) {

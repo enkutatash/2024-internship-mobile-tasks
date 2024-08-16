@@ -4,6 +4,7 @@ import 'package:ecommerce/core/constants/constants.dart';
 import 'package:ecommerce/core/failure/failure.dart';
 import 'package:ecommerce/features/auth/data_layer/data_source/remote_abstract.dart';
 import 'package:ecommerce/features/auth/data_layer/model/user_model.dart';
+import 'package:ecommerce/features/auth/data_layer/model/user_model_no_pass.dart';
 
 class RemoteDataSourceUser extends RemoteAbstract {
   Dio dio;
@@ -13,7 +14,7 @@ class RemoteDataSourceUser extends RemoteAbstract {
   Future<Either<Failure, UserModel>> register(UserModel user) async {
     try {
       Options options = Options(
-        contentType: Headers.formUrlEncodedContentType,
+        contentType: "application/json; charset=utf-8",
       );
       final usermodel = user.toJson();
       final response = await dio.post(
@@ -21,10 +22,9 @@ class RemoteDataSourceUser extends RemoteAbstract {
         data: usermodel,
         options: options,
       );
+
       if (response.statusCode == 201) {
-        final responseData = response.data;
-        final newUser = UserModel.fromJson(responseData);
-        return Right(newUser);
+        return Right(user);
       } else {
         return Left(Failure(message: 'Failed to register user'));
       }
@@ -38,17 +38,20 @@ class RemoteDataSourceUser extends RemoteAbstract {
       String email, String password) async {
     try {
       Options options = Options(
-        contentType: Headers.formUrlEncodedContentType,
+        contentType: "application/json; charset=utf-8",
       );
       final data = {
         'email': email,
         'password': password,
       };
+
       final response =
           await dio.post('$authKey/auth/login', data: data, options: options);
       if (response.statusCode == 201) {
         final responseData = response.data;
-        final userToken = responseData['access_token'];
+        final userToken = responseData['data']['access_token'];
+        print("Token");
+        print(userToken);
         return Right(userToken);
       } else {
         return Left(Failure(message: 'Failed to get token'));
@@ -59,7 +62,7 @@ class RemoteDataSourceUser extends RemoteAbstract {
   }
 
   @override
-  Future<Either<Failure, UserModel>> getUser(String token) async {
+  Future<Either<Failure, UserModelNoPass>> getUser(String token) async {
     try {
       Options options = Options(
         headers: {
@@ -67,16 +70,17 @@ class RemoteDataSourceUser extends RemoteAbstract {
           'Content-Type': 'application/json',
         },
       );
-      final response =
-          await dio.get('$authKey/users/me',options: options);
+      final response = await dio.get('$authKey/users/me', options: options);
       if (response.statusCode == 200) {
+        print("user loged in");
         final responseData = response.data;
-        final user = UserModel.fromJson(responseData);
+        final user = UserModelNoPass.fromJson(responseData['data']);
         return Right(user);
       } else {
         return Left(Failure(message: 'Failed to get user'));
       }
     } catch (e) {
+      print("Error: get usr $e");
       return Left(Failure(message: e.toString()));
     }
   }
